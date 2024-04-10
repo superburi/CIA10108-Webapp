@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="CIA10108-Webapp">
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <dependent-module archiveName="jstl-api-1.2.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/jstl-api-1.2/jstl-api-1.2">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="javax.servlet.jsp.jstl-1.2.5.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/javax.servlet.jsp.jstl-1.2.5/javax.servlet.jsp.jstl-1.2.5">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="xalan-2.7.2.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/xalan-2.7.2/xalan-2.7.2">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="serializer-2.7.2.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/serializer-2.7.2/serializer-2.7.2">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="mysql-connector-j-8.0.33.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/mysql-connector-j-8.0.33/mysql-connector-j-8.0.33">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="protobuf-java-3.21.9.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/protobuf-java-3.21.9/protobuf-java-3.21.9">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="xml-apis-1.3.04.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/xml-apis-1.3.04/xml-apis-1.3.04">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="CIA10108-Webapp"/>
+        <property name="java-output-path" value="/CIA10108-Webapp/build/classes"/>
+    </wb-module>
+</project-modules>
