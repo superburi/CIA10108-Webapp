@@ -1,8 +1,8 @@
-package trackdao;
+package RentalMyTrack.trackdao;
 
 import java.util.List;
 
-import trackvo.Track;
+import RentalMyTrack.trackvo.Track;
 
 public interface TrackDao {
 	

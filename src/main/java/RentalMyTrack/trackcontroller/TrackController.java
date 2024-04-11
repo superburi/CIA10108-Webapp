@@ -1,4 +1,4 @@
-package trackcontroller;
+package RentalMyTrack.trackcontroller;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import trackservice.TrackService;
-import trackvo.Track;
+import RentalMyTrack.trackservice.TrackService;
+import RentalMyTrack.trackvo.Track;
 
 
 @WebServlet("/TrackController")
@@ -44,11 +44,12 @@ public class TrackController extends HttpServlet {
 			// 檢查租借品編號
 			Integer rNo = null;
 			try {
+//				if (req.getParameter("rNo") == "") {
+//					errorMsgs.put("rNo", "租借品編號不能空白");
+//				}
 				rNo = Integer.valueOf(req.getParameter("rNo").trim());
 			} catch (NumberFormatException e) {
 				errorMsgs.put("rNo", "租借品編號請填數字");
-			} catch (NullPointerException nullPointerException) {
-				errorMsgs.put("rNo", "租借品編號不能空白");
 			}
 			// 檢查會員編號
 			Integer memNo = null;

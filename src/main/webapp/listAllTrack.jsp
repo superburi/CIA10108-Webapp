@@ -2,8 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%-- <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %> --%>
 <%@ page import="java.util.*"%>
-<%@ page import="trackservice.TrackService" %>
-<%@ page import="trackvo.Track" %>
+<%@ page import="RentalMyTrack.trackservice.TrackService" %>
+<%@ page import="RentalMyTrack.trackvo.Track" %>
 
 <%
 	TrackService trackService = new TrackService();

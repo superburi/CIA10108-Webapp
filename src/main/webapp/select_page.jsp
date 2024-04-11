@@ -48,7 +48,7 @@
 	<ul>
 	    <li><a href='listAllTrack.jsp'>查詢全部追蹤租借品</a><br></li>
 	
-	    <jsp:useBean id="trackService" scope="page" class="trackservice.TrackService" />
+	    <jsp:useBean id="trackService" scope="page" class="RentalMyTrack.trackservice.TrackService" />
 	
 	    <li>
 	        <FORM METHOD="post" ACTION="TrackController">

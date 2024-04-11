@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="trackvo.Track"%>
+<%@ page import="RentalMyTrack.trackvo.Track"%>
 
 <%
 	Track trackVO = (Track) request.getAttribute("trackVO");
