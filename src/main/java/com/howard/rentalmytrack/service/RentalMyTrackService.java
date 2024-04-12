@@ -1,16 +1,16 @@
-package RentalMyTrack.trackservice;
+package com.howard.rentalmytrack.service;
 
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
-import RentalMyTrack.trackdao.TrackDao;
-import RentalMyTrack.trackdao.TrackDaoImpl;
-import RentalMyTrack.trackvo.Track;
+import com.howard.rentalmytrack.dao.RentalMyTrackDao;
+import com.howard.rentalmytrack.dao.RentalMyTrackDaoImpl;
+import com.howard.rentalmytrack.vo.RentalMyTrackVo;
 
-public class TrackService {
+public class RentalMyTrackService {
 	
-	private TrackDao dao;
+	private RentalMyTrackDao dao;
 	
 	
 	/*
@@ -37,14 +37,14 @@ public class TrackService {
 	 * 		回傳值 : 裝著所有資料的 ArrayList
 	*/
 
-	public TrackService() {
-		dao = new TrackDaoImpl();
+	public RentalMyTrackService() {
+		dao = new RentalMyTrackDaoImpl();
 	}
 
-	public Track addTrack(Integer rNo, Integer memNo, 
-			Date expRentalDate) {
+	public RentalMyTrackVo addTrack(Integer rNo, Integer memNo,
+									Date expRentalDate) {
 
-		Track rmt = new Track();
+		RentalMyTrackVo rmt = new RentalMyTrackVo();
 
 		rmt.setrNo(rNo);
 		rmt.setmemNo(memNo);
@@ -62,10 +62,10 @@ public class TrackService {
 	}
 	
 	
-	public Track updateTrack(Integer rNo, Integer memNo,
-			Date expRentalDate) {
+	public RentalMyTrackVo updateTrack(Integer rNo, Integer memNo,
+									   Date expRentalDate) {
 
-		Track rmt = new Track();
+		RentalMyTrackVo rmt = new RentalMyTrackVo();
 
 		rmt.setrNo(rNo);
 		rmt.setmemNo(memNo);
@@ -80,12 +80,12 @@ public class TrackService {
 	}
 	
 
-	public Track getOneTrack(Integer rNo, Integer memNo) {
+	public RentalMyTrackVo getOneTrack(Integer rNo, Integer memNo) {
 		return dao.findByPK(rNo, memNo);
 	}
 
 	
-	public List<Track> getAll() {
+	public List<RentalMyTrackVo> getAll() {
 		return dao.getAll();
 	}
 	

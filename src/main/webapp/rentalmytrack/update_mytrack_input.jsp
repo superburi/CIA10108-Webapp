@@ -1,10 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page import="RentalMyTrack.trackvo.Track" %>
+<%@ page import="com.howard.rentalmytrack.vo.RentalMyTrackVo" %>
+<%@ page import="com.howard.rentalmytrack.vo.RentalMyTrackVo" %>
 
 
 <%
-     Track trackVO = (Track) request.getAttribute("trackVO");
+     RentalMyTrackVo rentalMyTrackVO = (RentalMyTrackVo) request.getAttribute("rentalMyTrackVO");
+	 pageContext.setAttribute("rentalMyTrackVO", rentalMyTrackVO);
 %>
 
 <html>
@@ -40,7 +42,7 @@
 	    <tr>
 	        <td>
 	            <h3>追蹤商品資料修改 - update_mytrack_input.jsp</h3>
-	            <h4><a href="select_page.jsp"><img src="images/back1.gif" width="100" height="32" border="0">回首頁</a></h4>
+	            <h4><a href="${pageContext.request.contextPath}/rentalmytrack/select_page.jsp"><img src="../images/back1.gif" width="100" height="32" border="0">回首頁</a></h4>
 	        </td>
 	    </tr>
 	</table>
@@ -57,19 +59,19 @@
     </c:if>
 
 
-	<form METHOD="post" ACTION="RentalMyTrack.TrackController" >
+	<form METHOD="post" ACTION="${pageContext.request.contextPath}/rentalmytrack/TrackController" >
 		<ul>
 			<li>
 				<b>輸入租借品編號 : </b>
-	            <input type="text" name="rNo" value="${trackVO.rNo}" required>
+	            <input type="text" name="rNo" value="${rentalMyTrackVO.rNo}" required>
 			</li>
 			<li>
 				<b>輸入會員編號 : </b>
-	            <input type="text" name="memNo" value="${trackVO.memNo}" required>
+	            <input type="text" name="memNo" value="${rentalMyTrackVO.memNo}" required>
 			</li>
 			<li>
 				<b>輸入期望租借日期 : </b>
-	            <input type="date" name="expRentalDate" value="${trackVO.expRentalDate}">
+	            <input type="date" name="expRentalDate" value="${rentalMyTrackVO.expRentalDate}">
 			</li>
 		</ul>
 		<input type="hidden" name="action" value="update">

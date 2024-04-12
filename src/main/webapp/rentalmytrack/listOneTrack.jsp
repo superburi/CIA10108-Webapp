@@ -1,8 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="RentalMyTrack.trackvo.Track"%>
+<%@ page import="com.howard.rentalmytrack.vo.RentalMyTrackVo"%>
 
 <%
-	Track trackVO = (Track) request.getAttribute("trackVO");
+	RentalMyTrackVo rentalMyTrackVO = (RentalMyTrackVo) request.getAttribute("rentalMyTrackVO");
 %>
 
 <html>
@@ -48,7 +48,7 @@
 <table id="table-1">
     <tr><td>
         <h3>租借品資料 - listOneTrack.jsp</h3>
-        <h4><a href="select_page.jsp"><img src="images/back1.gif" width="100" height="32" border="0">回首頁</a></h4>
+        <h4><a href="${pageContext.request.contextPath}/rentalmytrack/select_page.jsp"><img src="../images/back1.gif" width="100" height="32" border="0">回首頁</a></h4>
     </td></tr>
 </table>
 
@@ -61,10 +61,10 @@
     </tr>
 
     <tr>
-        <td>${trackVO.rNo}</td>
-        <td>${trackVO.memNo}</td>
-        <td>${trackVO.rTrackTime}</td>
-        <td>${trackVO.expRentalDate}</td>
+        <td>${rentalMyTrackVO.rNo}</td>
+        <td>${rentalMyTrackVO.memNo}</td>
+        <td>${rentalMyTrackVO.rTrackTime}</td>
+        <td>${rentalMyTrackVO.expRentalDate}</td>
     </tr>
 </table>
 

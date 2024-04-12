@@ -46,12 +46,12 @@
 	</c:if>
 
 	<ul>
-	    <li><a href='listAllTrack.jsp'>查詢全部追蹤租借品</a><br></li>
+	    <li><a href='${pageContext.request.contextPath}/rentalmytrack/listAllTrack.jsp'>查詢全部追蹤租借品</a><br></li>
 	
-	    <jsp:useBean id="trackService" scope="page" class="RentalMyTrack.trackservice.TrackService" />
+	    <jsp:useBean id="rentalMyTrackService" scope="page" class="com.howard.rentalmytrack.service.RentalMyTrackService" />
 	
 	    <li>
-	        <FORM METHOD="post" ACTION="TrackController">
+	        <FORM METHOD="post" ACTION="${pageContext.request.contextPath}/rentalmytrack/TrackController">
 	        	<b>輸入租借品編號 : </b>
 	            <input type="text" name="rNo" value="" required>
 	            <br>

@@ -1,8 +1,7 @@
-package RentalMyTrack.trackcontroller;
+package com.howard.rentalmytrack.controller;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -13,12 +12,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import RentalMyTrack.trackservice.TrackService;
-import RentalMyTrack.trackvo.Track;
+import com.howard.rentalmytrack.service.RentalMyTrackService;
+import com.howard.rentalmytrack.vo.RentalMyTrackVo;
 
 
-@WebServlet("/TrackController")
-public class TrackController extends HttpServlet {
+@WebServlet("/rentalmytrack/TrackController")
+public class RentalMyTrackController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
  
@@ -44,11 +43,11 @@ public class TrackController extends HttpServlet {
 			// 檢查租借品編號
 			Integer rNo = null;
 			try {
-//				if (req.getParameter("rNo") == "") {
-//					errorMsgs.put("rNo", "租借品編號不能空白");
-//				}
 				rNo = Integer.valueOf(req.getParameter("rNo").trim());
 			} catch (NumberFormatException e) {
+//				if (String.valueOf(rNo).trim() == "") {
+//					errorMsgs.put("rNo", "租借品編號不能空白");
+//				}
 				errorMsgs.put("rNo", "租借品編號請填數字");
 			}
 			// 檢查會員編號
@@ -69,15 +68,15 @@ public class TrackController extends HttpServlet {
 				errorMsgs.put("expRentalDate", "請輸入日期!");
 			}
 				
-			Track trackVO = new Track();
+			RentalMyTrackVo rentalMyTrackVO = new RentalMyTrackVo();
 			
-			trackVO.setrNo(rNo == null? null : Integer.valueOf(rNo));
-			trackVO.setmemNo(memNo == null? null : Integer.valueOf(memNo));
-			trackVO.setexpRentalDate(expRentalDate);
+			rentalMyTrackVO.setrNo(rNo == null? null : Integer.valueOf(rNo));
+			rentalMyTrackVO.setmemNo(memNo == null? null : Integer.valueOf(memNo));
+			rentalMyTrackVO.setexpRentalDate(expRentalDate);
 
 			// Send the use back to the form, if there were errors
 			if (!errorMsgs.isEmpty()) {
-				req.setAttribute("trackVO", trackVO); // 含有輸入格式錯誤的trackVO物件,也存入req
+				req.setAttribute("trackVO", rentalMyTrackVO); // 含有輸入格式錯誤的trackVO物件,也存入req
 				RequestDispatcher failureView = req
 						.getRequestDispatcher("addTrack.jsp");
 				failureView.forward(req, res);
@@ -85,12 +84,12 @@ public class TrackController extends HttpServlet {
 			}
 				
 			/***************************2.開始新增資料***************************************/
-			TrackService tSvc = new TrackService();
-			trackVO = tSvc.addTrack(Integer.valueOf(rNo), Integer.valueOf(memNo), 
+			RentalMyTrackService tSvc = new RentalMyTrackService();
+			rentalMyTrackVO = tSvc.addTrack(Integer.valueOf(rNo), Integer.valueOf(memNo),
 					expRentalDate);
 			
 			/***************************3.新增完成,準備轉交(Send the Success view)***********/
-			String url = "listAllTrack.jsp";
+			String url = "/rentalmytrack/listAllTrack.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllEmp.jsp
 			successView.forward(req, res);	
 				
@@ -106,16 +105,13 @@ public class TrackController extends HttpServlet {
 //            Integer rNo = Integer.valueOf(req.getParameter("rNo"));
 //            Integer memNo = Integer.valueOf(req.getParameter("memNo"));
             
-			/***********************1.接收請求參數 - 輸入格式的錯誤處理*************************/
-			
-			// 檢查租借品編號
+			/***********************1.接收請求參數 - 輸入格式的錯誤處理************************/
+
 			Integer rNo = null;
 			try {
 				rNo = Integer.valueOf(req.getParameter("rNo").trim());
 			} catch (NumberFormatException e) {
 				errorMsgs.put("rNo", "租借品編號請填數字");
-			} catch (NullPointerException nullPointerException) {
-				errorMsgs.put("rNo", "租借品編號不能空白");
 			}
 			// 檢查會員編號
 			Integer memNo = null;
@@ -126,20 +122,22 @@ public class TrackController extends HttpServlet {
 			} catch (NullPointerException nullPointerException) {
 				errorMsgs.put("memNo", "會員編號不能空白");
 			}
-			
+
 			if (!errorMsgs.isEmpty()) {
+//				req.setAttribute("trackVO", trackVO); // 含有輸入格式錯誤的trackVO物件,也存入req
 				RequestDispatcher failureView = req
-						.getRequestDispatcher("addTrack.jsp");
+						.getRequestDispatcher("/rentalmytrack/deleteTrack.jsp");
 				failureView.forward(req, res);
 				return;
 			}
 
+
             /***************************2.開始刪除資料***************************************/
-            TrackService trackService = new TrackService();
-            trackService.deleteTrack(rNo, memNo);
+            RentalMyTrackService rentalMyTrackService = new RentalMyTrackService();
+            rentalMyTrackService.deleteTrack(rNo, memNo);
 
             /***************************3.刪除完成,準備轉交(Send the Success view)***********/
-            String url = "listAllTrack.jsp";
+            String url = "/rentalmytrack/listAllTrack.jsp";
             RequestDispatcher successView = req.getRequestDispatcher(url); // 刪除成功，轉交回送出刪除的來源網站
             successView.forward(req, res);
             
@@ -182,28 +180,28 @@ public class TrackController extends HttpServlet {
 				errorMsgs.put("expRentalDate", "請輸入日期!");
 			}
 				
-			Track trackVO = new Track();
+			RentalMyTrackVo rentalMyTrackVO = new RentalMyTrackVo();
 			
-			trackVO.setrNo(rNo == null ? null : Integer.valueOf(rNo));
-			trackVO.setmemNo(memNo == null ? null : Integer.valueOf(memNo));
-			trackVO.setexpRentalDate(expRentalDate);
+			rentalMyTrackVO.setrNo(rNo == null ? null : Integer.valueOf(rNo));
+			rentalMyTrackVO.setmemNo(memNo == null ? null : Integer.valueOf(memNo));
+			rentalMyTrackVO.setexpRentalDate(expRentalDate);
 
 			// Send the use back to the form, if there were errors
 			if (!errorMsgs.isEmpty()) {
-				req.setAttribute("trackVO", trackVO); // 含有輸入格式錯誤的trackVO物件,也存入req
+				req.setAttribute("trackVO", rentalMyTrackVO); // 含有輸入格式錯誤的trackVO物件,也存入req
 				RequestDispatcher failureView = req
-						.getRequestDispatcher("addTrack.jsp");
+						.getRequestDispatcher("/rentalmytrack/update_mytrack_input.jsp");
 				failureView.forward(req, res);
 				return;
 			}
 				
 			/***************************2.開始修改資料*****************************************/
-			TrackService tSvc = new TrackService();
-			trackVO = tSvc.updateTrack(Integer.valueOf(rNo), Integer.valueOf(memNo), 
+			RentalMyTrackService tSvc = new RentalMyTrackService();
+			rentalMyTrackVO = tSvc.updateTrack(Integer.valueOf(rNo), Integer.valueOf(memNo),
 					expRentalDate);
 				
 			/***************************3.修改完成,準備轉交(Send the Success view)*************/
-			req.setAttribute("trackVO", trackVO); // 資料庫update成功後,正確的的empVO物件,存入req
+			req.setAttribute("trackVO", rentalMyTrackVO); // 資料庫update成功後,正確的的empVO物件,存入req
 			String url = "listOneTrack.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneEmp.jsp
 			successView.forward(req, res);
@@ -221,13 +219,13 @@ public class TrackController extends HttpServlet {
             Integer memNo = Integer.valueOf(req.getParameter("memNo"));
 
             /***************************2.開始查詢資料****************************************/
-            TrackService trackService = new TrackService();
-            Track trackVO = trackService.getOneTrack(rNo, memNo);
+            RentalMyTrackService rentalMyTrackService = new RentalMyTrackService();
+            RentalMyTrackVo rentalMyTrackVO = rentalMyTrackService.getOneTrack(rNo, memNo);
 
             /***************************3.查詢完成,準備轉交(Send the Success view)************/
 
             String url = "update_mytrack_input.jsp";
-        	req.setAttribute("trackVO", trackVO);
+        	req.setAttribute("trackVO", rentalMyTrackVO);
             RequestDispatcher successView = req.getRequestDispatcher(url);// 成功轉交 update_member_input.jsp
             successView.forward(req, res);
         }
@@ -269,9 +267,9 @@ public class TrackController extends HttpServlet {
 			}
 				
 			/***************************2.開始查詢資料*****************************************/
-			TrackService tSvc = new TrackService();
-			Track trackVO = tSvc.getOneTrack(rNo, memNo);
-			if (trackVO == null) {
+			RentalMyTrackService tSvc = new RentalMyTrackService();
+			RentalMyTrackVo rentalMyTrackVO = tSvc.getOneTrack(rNo, memNo);
+			if (rentalMyTrackVO == null) {
 				errorMsgs.put("noData", "查無資料");
 			}
 			if (!errorMsgs.isEmpty()) {
@@ -282,7 +280,7 @@ public class TrackController extends HttpServlet {
 			}
 			
 			/***************************3.查詢完成,準備轉交(Send the Success view)*************/
-			req.setAttribute("trackVO", trackVO); // 資料庫取出的empVO物件,存入req
+			req.setAttribute("trackVO", rentalMyTrackVO); // 資料庫取出的empVO物件,存入req
 			String url = "listOneTrack.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneEmp.jsp
 			successView.forward(req, res);

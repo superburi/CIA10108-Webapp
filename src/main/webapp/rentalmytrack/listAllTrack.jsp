@@ -2,12 +2,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%-- <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %> --%>
 <%@ page import="java.util.*"%>
-<%@ page import="RentalMyTrack.trackservice.TrackService" %>
-<%@ page import="RentalMyTrack.trackvo.Track" %>
+<%@ page import="com.howard.rentalmytrack.service.RentalMyTrackService" %>
+<%@ page import="com.howard.rentalmytrack.vo.RentalMyTrackVo" %>
+<%@ page import="com.howard.rentalmytrack.vo.RentalMyTrackVo" %>
 
 <%
-	TrackService trackService = new TrackService();
-    List<Track> list = trackService.getAll();
+	RentalMyTrackService rentalMyTrackService = new RentalMyTrackService();
+    List<RentalMyTrackVo> list = rentalMyTrackService.getAll();
     pageContext.setAttribute("list", list);
 %>
 <html>
@@ -54,7 +55,7 @@
     <tr>
         <td>
             <h3>所有追蹤商品的資料 - listAllTrack.jsp</h3>
-            <h4><a href="select_page.jsp"><img src="images/back1.gif" width="100" height="32" border="0">回首頁</a> </h4>
+            <h4><a href="${pageContext.request.contextPath}/rentalmytrack/select_page.jsp"><img src="../images/back1.gif" width="100" height="32" border="0">回首頁</a> </h4>
         </td>
     </tr>
 </table>
@@ -69,25 +70,25 @@
         <th>期望租借日期</th>
     </tr>
 
-    <c:forEach var="trackVO" items="${list}">
+    <c:forEach var="rentalMyTrackVO" items="${list}">
         <tr>
-            <td>${trackVO.rNo}</td>
-            <td>${trackVO.memNo}</td>
-            <td>${trackVO.rTrackTime}</td>
-            <td>${trackVO.expRentalDate}</td>
+            <td>${rentalMyTrackVO.rNo}</td>
+            <td>${rentalMyTrackVO.memNo}</td>
+            <td>${rentalMyTrackVO.rTrackTime}</td>
+            <td>${rentalMyTrackVO.expRentalDate}</td>
 
             <td>
-                <form method="post" action="TrackController" style="margin-bottom: 0px;">
+                <form method="post" action="${pageContext.request.contextPath}/rentalmytrack/TrackController" style="margin-bottom: 0px;">
                     <input type="submit" value="修改">
-                    <input type="hidden" name="rNo"  value="${trackVO.rNo}">
-                    <input type="hidden" name="memNo"  value="${trackVO.memNo}">
+                    <input type="hidden" name="rNo"  value="${rentalMyTrackVO.rNo}">
+                    <input type="hidden" name="memNo"  value="${rentalMyTrackVO.memNo}">
                     <input type="hidden" name="action"	value="getOne_For_Update"></form>
             </td>
             <td>
-                <form method="post" action="TrackController" style="margin-bottom: 0px;">
+                <form method="post" action="${pageContext.request.contextPath}/rentalmytrack/TrackController" style="margin-bottom: 0px;">
                     <input type="submit" value="刪除">
-                    <input type="hidden" name="rNo"  value="${trackVO.rNo}">
-                    <input type="hidden" name="memNo"  value="${trackVO.memNo}">
+                    <input type="hidden" name="rNo"  value="${rentalMyTrackVO.rNo}">
+                    <input type="hidden" name="memNo"  value="${rentalMyTrackVO.memNo}">
                     <input type="hidden" name="action"	value="delete"></form>
             </td>
         </tr>

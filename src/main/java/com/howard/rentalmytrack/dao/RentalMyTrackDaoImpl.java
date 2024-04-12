@@ -1,4 +1,4 @@
-package RentalMyTrack.trackdao;
+package com.howard.rentalmytrack.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,10 +9,10 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import RentalMyTrack.trackvo.Track;
+import com.howard.rentalmytrack.vo.RentalMyTrackVo;
 
 
-public class TrackDaoImpl implements TrackDao{
+public class RentalMyTrackDaoImpl implements RentalMyTrackDao {
 	
     String driver = "com.mysql.cj.jdbc.Driver";
     String url = "jdbc:mysql://localhost:3306/mytest?serverTimezone=Asia/Taipei";
@@ -28,7 +28,7 @@ public class TrackDaoImpl implements TrackDao{
     /* 以下方法按照 增、刪、改、查 排列 */
     
 	@Override
-	public void insert(Track rmt) {
+	public void insert(RentalMyTrackVo rmt) {
 		
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -128,7 +128,7 @@ public class TrackDaoImpl implements TrackDao{
 	
 	
 	@Override
-	public void update(Track rmt) {
+	public void update(RentalMyTrackVo rmt) {
 		
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -175,9 +175,9 @@ public class TrackDaoImpl implements TrackDao{
 	
     
 	@Override
-	public Track findByPK(Integer rNo, Integer memNo) {
+	public RentalMyTrackVo findByPK(Integer rNo, Integer memNo) {
 		
-        Track rmt = null;
+        RentalMyTrackVo rmt = null;
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -195,7 +195,7 @@ public class TrackDaoImpl implements TrackDao{
             
             while(rs.next()) {
             	
-            	rmt = new Track();
+            	rmt = new RentalMyTrackVo();
 				rmt.setrNo(rs.getInt("rNo"));
 				rmt.setmemNo(rs.getInt("memNo"));
 				rmt.setrTrackTime(rs.getTimestamp("rTrackTime"));
@@ -241,10 +241,10 @@ public class TrackDaoImpl implements TrackDao{
 
 
 	@Override
-	public List<Track> getAll() {
+	public List<RentalMyTrackVo> getAll() {
 		
-        List<Track> list = new ArrayList<Track>();
-        Track rmt = null;
+        List<RentalMyTrackVo> list = new ArrayList<RentalMyTrackVo>();
+        RentalMyTrackVo rmt = null;
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -258,7 +258,7 @@ public class TrackDaoImpl implements TrackDao{
             
             while(rs.next()) {
             	
-            	rmt = new Track();
+            	rmt = new RentalMyTrackVo();
 				rmt.setrNo(rs.getInt("rNo"));
 				rmt.setmemNo(rs.getInt("memNo"));
 				rmt.setrTrackTime(rs.getTimestamp("rTrackTime"));

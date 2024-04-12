@@ -1,20 +1,23 @@
-package RentalMyTrack.trackvo;
+package com.howard.rentalmytrack.vo;
 
 import java.sql.*;
 
-public class Track {
+public class RentalMyTrackVo {
+
+	/*
+	 * rNo -> 租借品編號
+	 * memNo -> 會員編號
+	 * rTrackTime -> 加入追蹤時間
+	 * expRentalDate -> 期望租借時間
+	 */
 	
     private Integer rNo;
     private Integer memNo;
     private Timestamp rTrackTime;
     private Date expRentalDate;
-    
-    /*
-     * rNo -> 租借品編號
-     * memNo -> 會員編號
-     * rTrackTime -> 加入追蹤時間
-     * expRentalDate -> 期望租借時間
-    */
+
+
+/*----------------------getter、setter--------------------------*/
     
 	public Integer getrNo() {
 		return rNo;
@@ -40,12 +43,5 @@ public class Track {
 	public void setexpRentalDate(Date expRentalDate) {
 		this.expRentalDate = expRentalDate;
 	}
-	@Override
-	public String toString() {
-		return "RentalMyTrack [rNo=" + rNo + ", memNo=" + memNo + ", rTrackTime=" + rTrackTime + ", expRentalDate="
-				+ expRentalDate + "]";
-	}
-
-    
 
 }
