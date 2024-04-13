@@ -11,9 +11,6 @@ import java.util.List;
 
 public class RentalOrderService {
 
-	private RentalOrderDao dao;
-
-
 	/*
 	 * 共有6個方法(照 增、刪、改、查 順序由上而下) :
 	 *
@@ -51,60 +48,107 @@ public class RentalOrderService {
 	 * 		回傳值 : 裝著所有資料的 ArrayList
 	*/
 
+	private RentalOrderDao dao;
 	public RentalOrderService() {
 		dao = new RentalOrderDaoImpl();
 	}
 
-//	public RentalOrderVo addOrder(Integer memNo, String rByrName, String rByrPhone, String rByrEmail,
-//                  String rRcvName, String rRcvPhone, Byte rTakeMethod, String rAddr, Byte rPayMethod,
-//                  BigDecimal rAllPrice, BigDecimal rAllDepPrice, Timestamp rOrdTime, Timestamp rDate,
-//                  Timestamp rBackDate, Timestamp rRealBackDate, Byte rPayStat, Byte rOrdStat, Byte rtnStat,
-//                  String rtnRemark, BigDecimal rtnCompensation) {
-//
-//		RentalOrder rmt = new RentalOrder();
-//
-//		rmt.setrNo(rNo);
-//		rmt.setmemNo(memNo);
-//		rmt.setexpRentalDate(expRentalDate);
-//		dao.insert(rmt);
-//		Timestamp timestamp = dao.findByPK(rNo, memNo).getrTrackTime();
-//		rmt.setrTrackTime(timestamp);
-//
-//		return rmt;
-//	}
-//
-//
-//	public void deleteOrder(Integer rNo, Integer memNo) {
-//		dao.delete(rNo, memNo);
-//	}
-//
-//
-//	public RentalOrder updateOrder(Integer rNo, Integer memNo,
-//								   Date expRentalDate) {
-//
-//		RentalOrder rmt = new RentalOrder();
-//
-//		rmt.setrNo(rNo);
-//		rmt.setmemNo(memNo);
-//		rmt.setexpRentalDate(expRentalDate);
-//
-//		Timestamp timestamp = dao.findByPK(rNo, memNo).getrTrackTime();
-//		rmt.setrTrackTime(timestamp);
-//
-//		dao.update(rmt);
-//
-//		return rmt;
-//	}
-//
-//
-//	public RentalOrder getOneOrder(Integer rNo, Integer memNo) {
-//		return dao.findByPK(rNo, memNo);
-//	}
-//
-//
-//	public List<RentalOrder> getAll() {
-//		return dao.getAll();
-//	}
+	public RentalOrderVo addOrder(Integer memNo, String rByrName, String rByrPhone, String rByrEmail,
+                  String rRcvName, String rRcvPhone, Byte rTakeMethod, String rAddr, Byte rPayMethod,
+                  BigDecimal rAllPrice, BigDecimal rAllDepPrice, Timestamp rOrdTime, Timestamp rDate,
+                  Timestamp rBackDate, Timestamp rRealBackDate, Byte rPayStat, Byte rOrdStat, Byte rtnStat,
+                  String rtnRemark, BigDecimal rtnCompensation) {
+
+		RentalOrderVo rentalOrderVo = new RentalOrderVo();
+
+		rentalOrderVo.setMemNo(memNo);
+		rentalOrderVo.setrByrName(rByrName);
+		rentalOrderVo.setrByrPhone(rByrPhone);
+		rentalOrderVo.setrByrEmail(rByrEmail);
+		rentalOrderVo.setrRcvName(rRcvName);
+		rentalOrderVo.setrRcvPhone(rRcvPhone);
+		rentalOrderVo.setrTakeMethod(rTakeMethod);
+		rentalOrderVo.setrAddr(rAddr);
+		rentalOrderVo.setrPayMethod(rPayMethod);
+		rentalOrderVo.setrAllPrice(rAllPrice);
+		rentalOrderVo.setrAllDepPrice(rAllDepPrice);
+		rentalOrderVo.setrOrdTime(rOrdTime);
+		rentalOrderVo.setrDate(rDate);
+		rentalOrderVo.setrBackDate(rBackDate);
+		rentalOrderVo.setrRealBackDate(rRealBackDate);
+		rentalOrderVo.setrPayStat(rPayStat);
+		rentalOrderVo.setrOrdStat(rOrdStat);
+		rentalOrderVo.setRtnStat(rtnStat);
+		rentalOrderVo.setRtnRemark(rtnRemark);
+		rentalOrderVo.setRtnCompensation(rtnCompensation);
+
+		int rOrdNo = dao.insert(rentalOrderVo);
+		RentalOrderVo rentalOrderVo1 = dao.findByPK(rOrdNo);
+
+		if (rentalOrderVo1 != null) {
+			return rentalOrderVo1;
+		} else {
+			return null;
+		}
+
+	}
+
+
+	public void deleteOrder(Integer rOrdNo) {
+		dao.delete(rOrdNo);
+	}
+
+
+	public RentalOrderVo updateOrder(Integer rOrdNo, Integer memNo, String rByrName, String rByrPhone,
+									 String rByrEmail, String rRcvName, String rRcvPhone, Byte rTakeMethod,
+									 String rAddr, Byte rPayMethod, BigDecimal rAllPrice, BigDecimal rAllDepPrice,
+									 Timestamp rOrdTime, Timestamp rDate, Timestamp rBackDate,
+									 Timestamp rRealBackDate, Byte rPayStat, Byte rOrdStat, Byte rtnStat,
+									 String rtnRemark, BigDecimal rtnCompensation) {
+
+		RentalOrderVo rentalOrderVo = new RentalOrderVo();
+
+		rentalOrderVo.setrOrdNo(rOrdNo);
+		rentalOrderVo.setMemNo(memNo);
+		rentalOrderVo.setrByrName(rByrName);
+		rentalOrderVo.setrByrPhone(rByrPhone);
+		rentalOrderVo.setrByrEmail(rByrEmail);
+		rentalOrderVo.setrRcvName(rRcvName);
+		rentalOrderVo.setrRcvPhone(rRcvPhone);
+		rentalOrderVo.setrTakeMethod(rTakeMethod);
+		rentalOrderVo.setrAddr(rAddr);
+		rentalOrderVo.setrPayMethod(rPayMethod);
+		rentalOrderVo.setrAllPrice(rAllPrice);
+		rentalOrderVo.setrAllDepPrice(rAllDepPrice);
+		rentalOrderVo.setrOrdTime(rOrdTime);
+		rentalOrderVo.setrDate(rDate);
+		rentalOrderVo.setrBackDate(rBackDate);
+		rentalOrderVo.setrRealBackDate(rRealBackDate);
+		rentalOrderVo.setrPayStat(rPayStat);
+		rentalOrderVo.setrOrdStat(rOrdStat);
+		rentalOrderVo.setRtnStat(rtnStat);
+		rentalOrderVo.setRtnRemark(rtnRemark);
+		rentalOrderVo.setRtnCompensation(rtnCompensation);
+
+		dao.update(rentalOrderVo);
+
+		return dao.findByPK(rOrdNo);
+
+	}
+
+
+	public RentalOrderVo getOneOrder(Integer rOrdNo) {
+		return dao.findByPK(rOrdNo);
+	}
+
+	public List<RentalOrderVo> getOneOrderByName(String rByrName) {
+		return dao.findByName(rByrName);
+	}
+
+
+	public List<RentalOrderVo> getAll() {
+		return dao.getAll();
+	}
 
 
 }

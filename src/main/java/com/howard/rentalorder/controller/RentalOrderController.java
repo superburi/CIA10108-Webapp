@@ -1,72 +1,135 @@
-//package com.howard.rentalorder.controller;
-//
-//import com.howard.rentalmytrack.service.RentalMyTrackService;
-//import com.howard.rentalmytrack.vo.RentalMyTrackVo;
-//
-//import javax.servlet.RequestDispatcher;
-//import javax.servlet.ServletException;
-//import javax.servlet.annotation.WebServlet;
-//import javax.servlet.http.HttpServlet;
-//import javax.servlet.http.HttpServletRequest;
-//import javax.servlet.http.HttpServletResponse;
-//import java.io.IOException;
-//import java.sql.Date;
-//import java.util.LinkedHashMap;
-//import java.util.Map;
-//
-//
-//@WebServlet("/rentalorder/RentalOrderController")
-//public class RentalOrderController extends HttpServlet {
-//	private static final long serialVersionUID = 1L;
-//
-//
-//	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-//		doPost(req, res);
-//	}
-//
-//
-//	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-//
-//		req.setCharacterEncoding("UTF-8");
-//		String action = req.getParameter("action");
-//
-//
-//		// 來自新增頁面(addTrack.jsp)，新增追蹤品的請求
-//        if ("insert".equals(action)) {
-//
-//			Map<String, String> errorMsgs = new LinkedHashMap<String, String>();
-//			req.setAttribute("errorMsgs", errorMsgs);
-//
-//			/***********************1.接收請求參數 - 輸入格式的錯誤處理*************************/
-//
-//			// 檢查租借品編號
-//			Integer rNo = null;
+package com.howard.rentalorder.controller;
+
+import com.howard.rentalmytrack.service.RentalMyTrackService;
+import com.howard.rentalmytrack.vo.RentalMyTrackVo;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+
+@WebServlet("/rentalorder/RentalOrderController")
+public class RentalOrderController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+
+	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		doPost(req, res);
+	}
+
+
+	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+
+        req.setCharacterEncoding("UTF-8");
+        String action = req.getParameter("action");
+
+
+        // 來自新增頁面(addTrack.jsp)，新增追蹤品的請求
+        if ("insert".equals(action)) {
+
+            Map<String, String> errorMsgs = new LinkedHashMap<String, String>();
+            req.setAttribute("errorMsgs", errorMsgs);
+
+            /***********************1.接收請求參數 - 輸入格式的錯誤處理*************************/
+
+            // 檢查租借品編號
+//			Integer No = null;
 //			try {
-//				rNo = Integer.valueOf(req.getParameter("rNo").trim());
+//				rOrdNo = Integer.valueOf(req.getParameter("rOrdNo").trim());
 //			} catch (NumberFormatException e) {
 ////				if (String.valueOf(rNo).trim() == "") {
 ////					errorMsgs.put("rNo", "租借品編號不能空白");
 ////				}
-//				errorMsgs.put("rNo", "租借品編號請填數字");
+//				errorMsgs.put("rOrdNo", "租借品編號請填數字");
 //			}
-//			// 檢查會員編號
-//			Integer memNo = null;
-//			try {
-//				memNo = Integer.valueOf(req.getParameter("memNo").trim());
-//			} catch (NumberFormatException e) {
-//				errorMsgs.put("memNo", "會員編號請填數字");
-//			} catch (NullPointerException nullPointerException) {
-//				errorMsgs.put("memNo", "會員編號不能空白");
-//			}
-//			// 檢查期望租借日期
-//			Date expRentalDate = null;
-//			try {
-//				expRentalDate = Date.valueOf(req.getParameter("expRentalDate"));
-//			} catch (IllegalArgumentException e) {
-//				expRentalDate = new Date(System.currentTimeMillis());
-//				errorMsgs.put("expRentalDate", "請輸入日期!");
-//			}
-//
+            // 檢查會員編號
+            Integer memNo = null;
+            try {
+                memNo = Integer.valueOf(req.getParameter("memNo").trim());
+            } catch (NumberFormatException e) {
+                errorMsgs.put("memNo", "會員編號請填數字");
+            } catch (NullPointerException nullPointerException) {
+                errorMsgs.put("memNo", "會員編號不能空白");
+            }
+
+            // 檢查訂購人姓名
+            String nameReg = "^[\\u4e00-\\u9fa5a-zA-Z]$";
+            String rByrName = req.getParameter("rByrName");
+            if (rByrName == null || rByrName.trim().isEmpty()) {
+                errorMsgs.put("rByrName", "訂購人姓名 : 請勿空白!");
+            } else if (!rByrName.equals(nameReg)) {
+                errorMsgs.put("rByrName", "訂購人姓名 : 只能是中文或英文!");
+            }
+
+            // 檢查訂購人手機號碼
+            String phoneReg = "^[0][9][0-9]{8}$";
+            String rByrPhone = req.getParameter("rByrPhone");
+            if (rByrPhone == null || rByrPhone.trim().isEmpty()) {
+                errorMsgs.put("rByrPhone", "訂購人手機號碼 : 請勿空白!");
+            } else if (!rByrPhone.equals(phoneReg)) {
+                errorMsgs.put("rByrPhone", "訂購人手機號碼 : 請輸入09開頭的10位數字!");
+            }
+
+            // 檢查訂購人 Email
+            String emailReg = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+            String rByrEmail = req.getParameter("rByrEmail");
+            if (rByrEmail == null || rByrEmail.trim().isEmpty()) {
+                errorMsgs.put("rRcvName", "Email : 請勿空白!");
+            } else if (!rByrPhone.equals(emailReg)) {
+                errorMsgs.put("rByrEmail", "Email : 格式不正確喔");
+            }
+
+            // 檢查收件人姓名 (直接拿 訂購人姓名 那邊的正則表達式來用)
+            String rRcvName = req.getParameter("rRcvName");
+            if (rRcvName == null || rRcvName.trim().isEmpty()) {
+                errorMsgs.put("rRcvName", "收件人姓名 : 請勿空白!");
+            } else if (!rRcvName.equals(nameReg)) {
+                errorMsgs.put("rRcvName", "收件人姓名 : 只能是中文或英文!");
+            }
+
+            // 檢查收件人手機號碼 (直接拿 訂購人手機號碼 那邊的正則表達式來用)
+            String rRcvPhone = req.getParameter("rRcvPhone");
+            if (rByrPhone == null || rByrPhone.trim().isEmpty()) {
+                errorMsgs.put("rByrPhone", "收件人手機號碼 : 請勿空白!");
+            } else if (!rByrPhone.equals(phoneReg)) {
+                errorMsgs.put("rByrPhone", "收件人手機號碼 : 請輸入09開頭的10位數字!");
+            }
+
+            // 檢查取貨方式
+            Byte rTakeMethod = null;
+            try {
+                rTakeMethod = Byte.valueOf(req.getParameter("rTakeMethod"));
+            } catch (NumberFormatException e) {
+                throw new RuntimeException(e);
+            }
+
+            // 檢查宅配住址
+            String addrReg = "^[\\u4e00-\\u9fa5a0-9]{10,100}$";
+            String rAddr = req.getParameter("rAddr");
+            if (rAddr == null || rAddr.trim().isEmpty()) {
+                errorMsgs.put("rAddr", "宅配地址 : 請勿空白!");
+            } else if (!rAddr.equals(addrReg)) {
+                errorMsgs.put("rAddr", "宅配地址 : 格式不正確喔");
+            }
+
+            // 檢查付款方式
+            Byte rPayMethod = null;
+            try {
+                rPayMethod = Byte.valueOf(req.getParameter("rPayMethod"));
+            } catch (NumberFormatException e) {
+                throw new RuntimeException(e);
+            }
+
+
+//            expRentalDate = new Date(System.currentTimeMillis());
+
 //			RentalMyTrackVo rentalMyTrackVO = new RentalMyTrackVo();
 //
 //			rentalMyTrackVO.setrNo(rNo == null? null : Integer.valueOf(rNo));
@@ -92,8 +155,7 @@
 //			RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllEmp.jsp
 //			successView.forward(req, res);
 //
-//		} // 新增結束
-//
+		} // 新增結束
 //
 //		// 來自所有追蹤品頁面(listAllTrack.jsp)、刪除追蹤品頁面(deleteTrack.jsp)，刪除單筆的請求
 //        if ("delete".equals(action)) {
@@ -285,7 +347,7 @@
 //			successView.forward(req, res);
 //
 //		} // 查詢單筆結束
-//
-//	} // doPost 結束
-//
-//}
+
+    } // doPost 結束
+
+}
