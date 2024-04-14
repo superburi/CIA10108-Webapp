@@ -81,7 +81,9 @@ public class RentalMyTrackService {
 	
 
 	public RentalMyTrackVo getOneTrack(Integer rNo, Integer memNo) {
+		System.out.println("aa");
 		return dao.findByPK(rNo, memNo);
+
 	}
 
 	

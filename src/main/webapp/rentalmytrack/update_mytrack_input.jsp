@@ -5,7 +5,7 @@
 
 
 <%
-     RentalMyTrackVo rentalMyTrackVO = (RentalMyTrackVo) request.getAttribute("rentalMyTrackVO");
+     RentalMyTrackVo rentalMyTrackVO = (RentalMyTrackVo) request.getAttribute("trackVO");
 	 pageContext.setAttribute("rentalMyTrackVO", rentalMyTrackVO);
 %>
 
