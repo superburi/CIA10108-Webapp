@@ -14,16 +14,16 @@
 //    String userid = "root";
 //    String passwd = "Yuhan1207";
 //
-//    private static final String GET_ONE = "SELECT rNo, memNo, rTrackTime, expRentalDate FROM rentalmytrack WHERE rNo = ? AND memNo = ?";
-//    private static final String GET_ALL = "SELECT rNo, memNo, rTrackTime, expRentalDate FROM rentalmytrack";
-//    private static final String INSERT = "INSERT INTO rentalmytrack (rNo, memNo, rTrackTime, expRentalDate) VALUES (?, ?, ?, ?)";
-//    private static final String UPDATE = "UPDATE rentalmytrack SET expRentalDate = ? WHERE rNo = ? AND memNo = ?";
-//    private static final String DELETE = "DELETE FROM rentalmytrack where rNo = ? AND memNo = ?";
+//    private static final String GET_ONE = "SELECT rOrdNo, rNo, rPrice, rDesPrice FROM rentalorderdetails WHERE rOrdNo = ? AND rNo = ?";
+//    private static final String GET_ALL = "SELECT rOrdNo, rNo, rPrice, rDesPrice FROM rentalorderdetails";
+//    private static final String INSERT = "INSERT INTO rentalorderdetails (rOrdNo, rNo, rPrice, rDesPrice) VALUES (?, ?, ?, ?)";
+//    private static final String UPDATE = "UPDATE rentalorderdetails SET rPrice = ?, rDesPrice = ? WHERE rOrdNo = ? AND rNo = ?";
+//    private static final String DELETE = "DELETE FROM rentalorderdetails where rOrdNo = ? AND rNo = ?";
 //
 //    /* 以下方法按照 增、刪、改、查 排列 */
 //
 //	@Override
-//	public void insert(RentalOrderDetails rmt) {
+//	public void insert(RentalOrderDetails rentalOrderDetails) {
 //
 //        Connection con = null;
 //        PreparedStatement pstmt = null;
@@ -72,7 +72,7 @@
 //
 //
 //	@Override
-//	public void delete(Integer rNo, Integer memNo) {
+//	public void delete(Integer rOrdNo, Integer rNo) {
 //
 //		Connection con = null;
 //		PreparedStatement pstmt = null;

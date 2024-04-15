@@ -417,6 +417,7 @@ public class RentalOrderDaoImpl implements RentalOrderDao {
                 rentalOrderVo.setrAllDepPrice(rs.getBigDecimal("rAllDepPrice"));
                 rentalOrderVo.setrOrdTime(rs.getTimestamp("rOrdTime"));
                 rentalOrderVo.setrDate(rs.getTimestamp("rDate"));
+                System.out.println(rs.getTimestamp("rDate"));
                 rentalOrderVo.setrBackDate(rs.getTimestamp("rBackDate"));
                 rentalOrderVo.setrRealBackDate(rs.getTimestamp("rRealBackDate"));
                 rentalOrderVo.setrPayStat(rs.getByte("rPayStat"));

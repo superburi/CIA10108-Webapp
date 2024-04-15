@@ -15,6 +15,9 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -102,6 +105,9 @@ public class RentalOrderController extends HttpServlet {
             Byte rTakeMethod = null;
             try {
                 rTakeMethod = Byte.valueOf(req.getParameter("rTakeMethod"));
+                if (rTakeMethod == 0) {
+                    errorMsgs.put("rTakeMethod", "取貨方式 : 請選擇一種取貨方式!");
+                }
             } catch (NumberFormatException e) {
                 throw new RuntimeException(e);
             }
@@ -119,6 +125,9 @@ public class RentalOrderController extends HttpServlet {
             Byte rPayMethod = null;
             try {
                 rPayMethod = Byte.valueOf(req.getParameter("rPayMethod"));
+                if (rPayMethod == 0) {
+                    errorMsgs.put("rTakeMethod", "付款方式 : 請選擇一種付款方式!");
+                }
             } catch (NumberFormatException e) {
                 throw new RuntimeException(e);
             }
@@ -158,7 +167,12 @@ public class RentalOrderController extends HttpServlet {
             // 檢查預計租借日期
             Timestamp rDate = null;
             try {
-                rDate = Timestamp.valueOf(req.getParameter("rDate"));
+//                rDate = Timestamp.valueOf(req.getParameter("rDate"));
+                String rDate_str = req.getParameter("rDate");
+                String str2 = rDate_str + ":00.0";
+                rDate = Timestamp.valueOf(str2);
+//                System.out.println("a = " + rDate);
+
             } catch (IllegalArgumentException e) {
 //                rDate = new Timestamp(currentTimeMillis());
                 errorMsgs.put("rDate", "預計租借日期 : 請輸入日期!");
@@ -169,7 +183,12 @@ public class RentalOrderController extends HttpServlet {
             // 檢查預計歸還日期
             Timestamp rBackDate = null;
             try {
-                rBackDate = Timestamp.valueOf(req.getParameter("rBackDate"));
+//                rBackDate = Timestamp.valueOf(req.getParameter("rBackDate"));
+
+                String rBackDate_str = req.getParameter("rBackDate");
+                String str2 = rBackDate_str + ":00.0";
+                rBackDate = Timestamp.valueOf(str2);
+
             } catch (IllegalArgumentException e) {
 //                rBackDate = new Timestamp(currentTimeMillis());
                 errorMsgs.put("rBackDate", "預計歸還日期 : 請輸入日期!");
@@ -191,21 +210,29 @@ public class RentalOrderController extends HttpServlet {
             * 若當下沒有付款，則自動設為 0 ，待付款後自動更新訂單，設為 1
             *
             */
-            Byte rPayStat = Byte.valueOf(req.getParameter("rPayStat"));
+//            Byte rPayStat = Byte.valueOf(req.getParameter("rPayStat"));
+//            if (rPayMethod == 2) {
+                    Byte rPayStat = 0;
+//            }
+
 
             // 檢查訂單狀態 (不需要檢查，初始狀態就是 40(訂單成立))
-            Byte rOrdStat = Byte.valueOf(req.getParameter("rOrdStat"));
-
+//            Byte rOrdStat = Byte.valueOf(req.getParameter("rOrdStat"));
+            Byte rOrdStat = 40;
             // 檢查歸還狀態 (不需要檢查，初始狀態就是 0(未歸還)，歸還後更新訂單為 1)
-            Byte rtnStat = Byte.valueOf(req.getParameter("rtnStat"));
-
+//            Byte rtnStat = Byte.valueOf(req.getParameter("rtnStat"));
+            Byte rtnStat = 0;
             /* 檢查歸還註記
             *
             * 創建訂單時，預設前端傳送過來的請求，帶有參數"尚未歸還"
             * 實際歸還時才需檢查，由員工手動輸入歸還註記
             *
             */
-            String rtnRemark = req.getParameter("rtnRemark");
+            String rtnRemark = null;
+            if (rOrdStat !=  0 || rOrdStat != 50 || rOrdStat != 82) {
+                rtnRemark = "尚未歸還";
+            }
+            rtnRemark = req.getParameter("rtnRemark");
             if (rtnRemark == null || rtnRemark.trim().isEmpty()) {
                 errorMsgs.put("rtnRemark", "歸還註記 : 請勿空白!");
             }
@@ -219,6 +246,9 @@ public class RentalOrderController extends HttpServlet {
             */
             BigDecimal rtnCompensation = null;
             try {
+                if (rOrdStat !=  0 || rOrdStat != 50 || rOrdStat != 82) {
+                    rtnCompensation = new BigDecimal(0);
+                }
                 rtnCompensation = new BigDecimal(req.getParameter("rtnCompensation"));
             } catch (NumberFormatException e) {
                 errorMsgs.put("rtnCompensation", "賠償金額 : 請填數字!");
@@ -259,9 +289,9 @@ public class RentalOrderController extends HttpServlet {
 
 			/***************************2.開始新增資料***************************************/
 			RentalOrderService rentalMyTrackService = new RentalOrderService();
-			RentalOrderVo rentalOrderVo1 = rentalMyTrackService.addOrder(memNo, rByrName, rByrPhone, rByrEmail,
-                    rRcvName, rRcvPhone, rTakeMethod, rAddr, rPayMethod, rAllPrice, rAllDepPrice, rOrdTime,
-                    rDate, rBackDate, rRealBackDate, rPayStat, rOrdStat, rtnStat, rtnRemark, rtnCompensation);
+//			RentalOrderVo rentalOrderVo1 = rentalMyTrackService.addOrder(memNo, rByrName, rByrPhone, rByrEmail,
+//                    rRcvName, rRcvPhone, rTakeMethod, rAddr, rPayMethod, rAllPrice, rAllDepPrice, rOrdTime,
+//                    rDate, rBackDate, rRealBackDate, rPayStat, rOrdStat, rtnStat, rtnRemark, rtnCompensation);
 
 			/***************************3.新增完成,準備轉交(Send the Success view)***********/
 			String url = "/rentalorder/listAllOrder.jsp";
