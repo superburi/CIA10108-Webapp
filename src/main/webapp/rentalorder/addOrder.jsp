@@ -1,4 +1,4 @@
-<%--
+<%@ page import="com.howard.rentalorder.vo.RentalOrderVo" %><%--
   Created by IntelliJ IDEA.
   User: TMP-214
   Date: 2024/4/15
@@ -7,6 +7,11 @@
 --%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="Big5"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<%
+    RentalOrderVo rentalOrderVo = (RentalOrderVo) request.getAttribute("rentalOrderVo");
+    pageContext.setAttribute("rentalOrderVo", rentalOrderVo);
+%>
 
 <html>
 <head>
@@ -61,64 +66,64 @@
 <form METHOD="post" ACTION="${pageContext.request.contextPath}/rentalorder/RentalOrderController" >
     <ul>
         <li>
-            <b>輸入租借品編號 : </b>
-            <input type="text" name="rNo" value="" required>
+            <b>輸入會員編號 : </b>
+            <input type="text" name="memNo" value="${rentalOrderVo.memNo}" required>
         </li>
         <li>
             <b>輸入訂購人姓名 : </b>
-            <input type="text" name="rByrName" value="" required>
+            <input type="text" name="rByrName" value="${rentalOrderVo.rByrName}" required>
         </li>
         <li>
             <b>輸入訂購人手機號碼 : </b>
-            <input type="text" name="rByrPhone" value="" required>
+            <input type="text" name="rByrPhone" value="${rentalOrderVo.rByrPhone}" required>
         </li>
         <li>
             <b>輸入訂購人 Email : </b>
-            <input type="text" name="rByrEmail" value="" required>
+            <input type="text" name="rByrEmail" value="${rentalOrderVo.rByrEmail}" required>
         </li>
         <li>
             <b>輸入收件人姓名 : </b>
-            <input type="text" name="rRcvName" value="" required>
+            <input type="text" name="rRcvName" value="${rentalOrderVo.rRcvName}" required>
         </li>
         <li>
             <b>輸入收件人手機號碼 : </b>
-            <input type="text" name="rRcvPhone" value="" required>
+            <input type="text" name="rRcvPhone" value="${rentalOrderVo.rRcvPhone}" required>
         </li>
         <li>
             <b>選擇取貨方式 : </b>
             <select size="1" name="rTakeMethod">
-                <option value="0" selected>請選擇
-                <option value="1">店取
-                <option value="2">宅配到府
+                <option value="0" ${rentalOrderVo.rTakeMethod != 1 && rentalOrderVo.rTakeMethod != 2 ? "selected" : ""}>請選擇
+                <option value="1" ${rentalOrderVo.rTakeMethod == 1 ? "selected" : ""} >店取
+                <option value="2" ${rentalOrderVo.rTakeMethod == 2 ? "selected" : ""} >宅配到府
             </select>
         </li>
         <li>
             <b>輸入宅配地址 : </b>
-            <input type="text" name="rAddr" value="" required>
+            <input type="text" name="rAddr" value="${rentalOrderVo.rAddr}" required>
         </li>
         <li>
             <b>選擇付款方式 : </b>
             <select size="1" name="rPayMethod">
-                <option value="0" selected>請選擇
-                <option value="1">綠界
-                <option value="2">現場付款
+                <option value="0" ${rentalOrderVo.rPayMethod != 1 && rentalOrderVo.rPayMethod != 2 ? "selected" : ""}>請選擇
+                <option value="1" ${rentalOrderVo.rPayMethod == 1 ? "selected" : ""}>綠界
+                <option value="2" ${rentalOrderVo.rPayMethod == 2 ? "selected" : ""}>現場付款
             </select>
         </li>
         <li>
             <b>輸入訂單總金額(低配版) : </b>
-            <input type="text" name="rAllPrice" value="" required>
+            <input type="text" name="rAllPrice" value="${rentalOrderVo.rAllPrice}" required>
         </li>
         <li>
             <b>輸入押金總金額(低配版) : </b>
-            <input type="text" name="rAllDepPrice" value="" required>
+            <input type="text" name="rAllDepPrice" value="${rentalOrderVo.rAllDepPrice}" required>
         </li>
         <li>
             <b>輸入預計租借日期(低配版) : </b>
-            <input type="datetime-local" name="rDate" value="" required>
+            <input type="datetime-local" name="rDate" value="${rentalOrderVo.rDate}" required>
         </li>
         <li>
             <b>輸入預計歸還日期(低配版) : </b>
-            <input type="datetime-local" name="rBackDate" value="" required>
+            <input type="datetime-local" name="rBackDate" value="${rentalOrderVo.rBackDate}" required>
         </li>
 
     </ul>

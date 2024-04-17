@@ -53,7 +53,7 @@ public class RentalOrderService {
 		dao = new RentalOrderDaoImpl();
 	}
 
-	public RentalOrderVo addOrder(Integer memNo, String rByrName, String rByrPhone, String rByrEmail,
+	public void addOrder(Integer memNo, String rByrName, String rByrPhone, String rByrEmail,
                   String rRcvName, String rRcvPhone, Byte rTakeMethod, String rAddr, Byte rPayMethod,
                   BigDecimal rAllPrice, BigDecimal rAllDepPrice, Timestamp rOrdTime, Timestamp rDate,
                   Timestamp rBackDate, Timestamp rRealBackDate, Byte rPayStat, Byte rOrdStat, Byte rtnStat,
@@ -82,14 +82,15 @@ public class RentalOrderService {
 		rentalOrderVo.setRtnRemark(rtnRemark);
 		rentalOrderVo.setRtnCompensation(rtnCompensation);
 
-		int rOrdNo = dao.insert(rentalOrderVo);
-		RentalOrderVo rentalOrderVo1 = dao.findByPK(rOrdNo);
+//		int rOrdNo = dao.insert(rentalOrderVo);
+		dao.insert(rentalOrderVo);
+//		RentalOrderVo rentalOrderVo1 = dao.findByPK(rOrdNo);
 
-		if (rentalOrderVo1 != null) {
-			return rentalOrderVo1;
-		} else {
-			return null;
-		}
+//		if (rentalOrderVo1 != null) {
+//			return rentalOrderVo1;
+//		} else {
+//			return null;
+//		}
 
 	}
 

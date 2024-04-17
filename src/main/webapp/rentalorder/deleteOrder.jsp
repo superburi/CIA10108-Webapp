@@ -2,7 +2,7 @@
   Created by IntelliJ IDEA.
   User: TMP-214
   Date: 2024/4/15
-  Time: 上午 10:54
+  Time: 下午 09:42
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -10,7 +10,7 @@
 
 <html>
 <head>
-    <title>租借品訂單首頁</title>
+    <title>刪除租借品訂單 - deleteOrder.jsp</title>
 
     <style>
         table#table-1 {
@@ -37,10 +37,15 @@
 <body bgcolor='white'>
 
 <table id="table-1">
-    <tr><td><h3>RentalOrder</h3><h4>( MVC )</h4></td></tr>
+    <tr>
+        <td>
+            <h3>刪除租借品訂單 - deleteOrder.jsp</h3>
+            <h4><a href="${pageContext.request.contextPath}/rentalorder/select_page.jsp"><img src="../images/back1.gif" width="100" height="32" border="0">回首頁</a> </h4>
+        </td>
+    </tr>
 </table>
 
-<h3>資料查詢:</h3>
+<h3>刪除追蹤品 : </h3>
 
 <!-- 錯誤表列 -->
 <c:if test="${not empty errorMsgs}">
@@ -52,35 +57,17 @@
     </ul>
 </c:if>
 
-<ul>
-    <li><a href='${pageContext.request.contextPath}/rentalorder/listAllOrder.jsp'>查詢全部租借品訂單</a><br></li>
 
-    <jsp:useBean id="rentalOrderService" scope="page" class="com.howard.rentalorder.service.RentalOrderService" />
-
-    <li>
-        <FORM METHOD="post" ACTION="${pageContext.request.contextPath}/rentalorder/RentalOrderController">
-            <b>輸入租借品訂單編號 : </b>
+<form METHOD="post" ACTION="${pageContext.request.contextPath}/rentalorder/RentalOrderController" >
+    <ul>
+        <li>
+            <b>輸入租借訂單編號 : </b>
             <input type="text" name="rOrdNo" value="" required>
-            <br>
-            <input type="hidden" name="action" value="getOne_For_Display">
-            <input type="submit" value="送出">
-        </FORM>
-    </li>
-
-</ul>
-
-
-<h3>租借品訂單管理</h3>
-
-<ul>
-    <li><a href='addOrder.jsp'>新增租借品訂單</a></li>
-</ul>
-
-<ul>
-    <li><a href='deleteOrder.jsp'>刪除租借品訂單</a></li>
-</ul>
-
-
+        </li>
+    </ul>
+    <input type="hidden" name="action" value="delete">
+    <input type="submit" value="送出">
+</form>
 
 </body>
 </html>

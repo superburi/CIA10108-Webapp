@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface RentalOrderDao {
 
-	int insert(RentalOrderVo rentalOrderVo);
+	void insert(RentalOrderVo rentalOrderVo);
 
 	void delete(Integer rOrdNo);
 

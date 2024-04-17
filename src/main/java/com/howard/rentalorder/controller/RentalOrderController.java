@@ -1,10 +1,7 @@
 package com.howard.rentalorder.controller;
 
-import com.howard.rentalmytrack.service.RentalMyTrackService;
-import com.howard.rentalmytrack.vo.RentalMyTrackVo;
 import com.howard.rentalorder.service.RentalOrderService;
 import com.howard.rentalorder.vo.RentalOrderVo;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,11 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -59,11 +52,11 @@ public class RentalOrderController extends HttpServlet {
             }
 
             // 檢查訂購人姓名
-            String nameReg = "^[\\u4e00-\\u9fa5a-zA-Z]$";
+            String nameReg = "^[\\u4e00-\\u9fa5_a-zA-Z]+$";
             String rByrName = req.getParameter("rByrName");
             if (rByrName == null || rByrName.trim().isEmpty()) {
                 errorMsgs.put("rByrName", "訂購人姓名 : 請勿空白!");
-            } else if (!rByrName.equals(nameReg)) {
+            } else if (!rByrName.matches(nameReg)) {
                 errorMsgs.put("rByrName", "訂購人姓名 : 只能是中文或英文!");
             }
 
@@ -72,16 +65,17 @@ public class RentalOrderController extends HttpServlet {
             String rByrPhone = req.getParameter("rByrPhone");
             if (rByrPhone == null || rByrPhone.trim().isEmpty()) {
                 errorMsgs.put("rByrPhone", "訂購人手機號碼 : 請勿空白!");
-            } else if (!rByrPhone.equals(phoneReg)) {
+            } else if (!rByrPhone.matches(phoneReg)) {
                 errorMsgs.put("rByrPhone", "訂購人手機號碼 : 請輸入09開頭的10位數字!");
             }
 
             // 檢查訂購人 Email
-            String emailReg = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+//            String emailReg = "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$";
+            String emailReg = "^[a-zA-z0-9]+@[a-zA-Z]+\\.[a-zA-Z]+$";
             String rByrEmail = req.getParameter("rByrEmail");
             if (rByrEmail == null || rByrEmail.trim().isEmpty()) {
                 errorMsgs.put("rRcvName", "Email : 請勿空白!");
-            } else if (!rByrPhone.equals(emailReg)) {
+            } else if (!rByrEmail.matches(emailReg)) {
                 errorMsgs.put("rByrEmail", "Email : 格式不正確喔!");
             }
 
@@ -89,7 +83,7 @@ public class RentalOrderController extends HttpServlet {
             String rRcvName = req.getParameter("rRcvName");
             if (rRcvName == null || rRcvName.trim().isEmpty()) {
                 errorMsgs.put("rRcvName", "收件人姓名 : 請勿空白!");
-            } else if (!rRcvName.equals(nameReg)) {
+            } else if (!rRcvName.matches(nameReg)) {
                 errorMsgs.put("rRcvName", "收件人姓名 : 只能是中文或英文!");
             }
 
@@ -97,7 +91,7 @@ public class RentalOrderController extends HttpServlet {
             String rRcvPhone = req.getParameter("rRcvPhone");
             if (rByrPhone == null || rByrPhone.trim().isEmpty()) {
                 errorMsgs.put("rByrPhone", "收件人手機號碼 : 請勿空白!");
-            } else if (!rByrPhone.equals(phoneReg)) {
+            } else if (!rByrPhone.matches(phoneReg)) {
                 errorMsgs.put("rByrPhone", "收件人手機號碼 : 請輸入09開頭的10位數字!");
             }
 
@@ -113,11 +107,11 @@ public class RentalOrderController extends HttpServlet {
             }
 
             // 檢查宅配住址
-            String addrReg = "^[\\u4e00-\\u9fa5a0-9]{10,100}$";
+            String addrReg = "^[\\u4e00-\\u9fa5a0-9]{1,100}$";
             String rAddr = req.getParameter("rAddr");
             if (rAddr == null || rAddr.trim().isEmpty()) {
                 errorMsgs.put("rAddr", "宅配地址 : 請勿空白!");
-            } else if (!rAddr.equals(addrReg)) {
+            } else if (!rAddr.matches(addrReg)) {
                 errorMsgs.put("rAddr", "宅配地址 : 格式不正確喔!");
             }
 
@@ -133,7 +127,6 @@ public class RentalOrderController extends HttpServlet {
             }
 
             // 檢查訂單總金額
-//            String priceReg = "^\\d{1,6}$";
             BigDecimal rAllPrice = null;
             try {
                 rAllPrice = new BigDecimal(req.getParameter("rAllPrice"));
@@ -156,25 +149,16 @@ public class RentalOrderController extends HttpServlet {
             // 檢查下單時間 (不需要檢查)
             Timestamp rOrdTime = new Timestamp(currentTimeMillis());
 
-//            Timestamp rOrdTime = null;
-//            try {
-//                rOrdTime = Timestamp.valueOf(req.getParameter("rOrdTime"));
-//            } catch (IllegalArgumentException e) {
-//                rOrdTime = new Timestamp(currentTimeMillis());
-//                errorMsgs.put("rOrdTime", "下單時間 : 請輸入日期!");
-//            }
-
             // 檢查預計租借日期
             Timestamp rDate = null;
             try {
-//                rDate = Timestamp.valueOf(req.getParameter("rDate"));
+
                 String rDate_str = req.getParameter("rDate");
-                String str2 = rDate_str + ":00.0";
-                rDate = Timestamp.valueOf(str2);
-//                System.out.println("a = " + rDate);
+                String str2 = rDate_str + ":00.00";
+                rDate = Timestamp.valueOf(str2.replace("T", " "));
+                System.out.println(rDate);
 
             } catch (IllegalArgumentException e) {
-//                rDate = new Timestamp(currentTimeMillis());
                 errorMsgs.put("rDate", "預計租借日期 : 請輸入日期!");
             }
 
@@ -183,17 +167,23 @@ public class RentalOrderController extends HttpServlet {
             // 檢查預計歸還日期
             Timestamp rBackDate = null;
             try {
-//                rBackDate = Timestamp.valueOf(req.getParameter("rBackDate"));
 
                 String rBackDate_str = req.getParameter("rBackDate");
-                String str2 = rBackDate_str + ":00.0";
-                rBackDate = Timestamp.valueOf(str2);
+                String str2 = rBackDate_str + ":00.00";
+                rBackDate = Timestamp.valueOf(str2.replace("T", " "));
+                System.out.println(rBackDate);
+
 
             } catch (IllegalArgumentException e) {
-//                rBackDate = new Timestamp(currentTimeMillis());
                 errorMsgs.put("rBackDate", "預計歸還日期 : 請輸入日期!");
             }
-            int result = rBackDate.compareTo(rDate);
+            int result = 0;
+            try {
+                result = rBackDate.compareTo(rDate);
+            } catch (NullPointerException e) {
+                System.out.println("吃到exception了");
+            }
+
             if (result < 0) {
                 errorMsgs.put("rBackDate", "預計歸還日期 : 不可早於預計租借日期!");
             } else if (result == 0) {
@@ -210,46 +200,28 @@ public class RentalOrderController extends HttpServlet {
             * 若當下沒有付款，則自動設為 0 ，待付款後自動更新訂單，設為 1
             *
             */
-//            Byte rPayStat = Byte.valueOf(req.getParameter("rPayStat"));
-//            if (rPayMethod == 2) {
-                    Byte rPayStat = 0;
-//            }
-
+            Byte rPayStat = 0;
 
             // 檢查訂單狀態 (不需要檢查，初始狀態就是 40(訂單成立))
-//            Byte rOrdStat = Byte.valueOf(req.getParameter("rOrdStat"));
             Byte rOrdStat = 40;
+
             // 檢查歸還狀態 (不需要檢查，初始狀態就是 0(未歸還)，歸還後更新訂單為 1)
-//            Byte rtnStat = Byte.valueOf(req.getParameter("rtnStat"));
             Byte rtnStat = 0;
+
             /* 檢查歸還註記
-            *
             * 創建訂單時，預設前端傳送過來的請求，帶有參數"尚未歸還"
             * 實際歸還時才需檢查，由員工手動輸入歸還註記
-            *
             */
-            String rtnRemark = null;
-            if (rOrdStat !=  0 || rOrdStat != 50 || rOrdStat != 82) {
-                rtnRemark = "尚未歸還";
-            }
-            rtnRemark = req.getParameter("rtnRemark");
-            if (rtnRemark == null || rtnRemark.trim().isEmpty()) {
-                errorMsgs.put("rtnRemark", "歸還註記 : 請勿空白!");
-            }
+            String rtnRemark = "尚未歸還";
 
             /* 檢查賠償金額
-            *
             * 創建訂單時，預設前端傳送過來的請求，帶有參數 0
             * 實際歸還時才需檢查，由員工手動輸入賠償金額
             * 若有損壞，則必須有賠償金額
-            *
             */
             BigDecimal rtnCompensation = null;
             try {
-                if (rOrdStat !=  0 || rOrdStat != 50 || rOrdStat != 82) {
-                    rtnCompensation = new BigDecimal(0);
-                }
-                rtnCompensation = new BigDecimal(req.getParameter("rtnCompensation"));
+                rtnCompensation = new BigDecimal(0);
             } catch (NumberFormatException e) {
                 errorMsgs.put("rtnCompensation", "賠償金額 : 請填數字!");
             } catch (NullPointerException nullPointerException) {
@@ -257,7 +229,7 @@ public class RentalOrderController extends HttpServlet {
             }
 
             RentalOrderVo rentalOrderVo = new RentalOrderVo();
-            rentalOrderVo.setrOrdNo(1);
+            rentalOrderVo.setrOrdNo(0);
             rentalOrderVo.setMemNo(memNo);
             rentalOrderVo.setrByrName(rByrName);
             rentalOrderVo.setrByrPhone(rByrPhone);
@@ -289,9 +261,9 @@ public class RentalOrderController extends HttpServlet {
 
 			/***************************2.開始新增資料***************************************/
 			RentalOrderService rentalMyTrackService = new RentalOrderService();
-//			RentalOrderVo rentalOrderVo1 = rentalMyTrackService.addOrder(memNo, rByrName, rByrPhone, rByrEmail,
-//                    rRcvName, rRcvPhone, rTakeMethod, rAddr, rPayMethod, rAllPrice, rAllDepPrice, rOrdTime,
-//                    rDate, rBackDate, rRealBackDate, rPayStat, rOrdStat, rtnStat, rtnRemark, rtnCompensation);
+			rentalMyTrackService.addOrder(memNo, rByrName, rByrPhone, rByrEmail, rRcvName, rRcvPhone,
+                    rTakeMethod, rAddr, rPayMethod, rAllPrice, rAllDepPrice, rOrdTime, rDate, rBackDate,
+                    rRealBackDate, rPayStat, rOrdStat, rtnStat, rtnRemark, rtnCompensation);
 
 			/***************************3.新增完成,準備轉交(Send the Success view)***********/
 			String url = "/rentalorder/listAllOrder.jsp";
@@ -342,18 +314,14 @@ public class RentalOrderController extends HttpServlet {
 			req.setAttribute("errorMsgs", errorMsgs);
 
 			/***************************1.接收請求參數 - 輸入格式的錯誤處理**********************/
-            // 檢查租借品訂單編號
+            // 檢查訂單編號
             Integer rOrdNo = null;
             try {
                 rOrdNo = Integer.valueOf(req.getParameter("rOrdNo").trim());
             } catch (NumberFormatException e) {
-                errorMsgs.put("rOrdNo", "租借品訂單編號 : 請填數字!");
+                errorMsgs.put("rOrdNo", "訂單編號 : 請填數字!");
             } catch (NullPointerException nullPointerException) {
-                errorMsgs.put("rOrdNo", "租借品訂單編號 : 不能空白!");
-            }
-            RentalOrderService rentalOrderService = new RentalOrderService();
-            if (rentalOrderService.getOneOrder(rOrdNo) == null) {
-                errorMsgs.put("rOrdNo", "查無此訂單");
+                errorMsgs.put("rOrdNo", "訂單編號 : 不能空白!");
             }
 
             // 檢查會員編號
@@ -367,11 +335,11 @@ public class RentalOrderController extends HttpServlet {
             }
 
             // 檢查訂購人姓名
-            String nameReg = "^[\\u4e00-\\u9fa5a-zA-Z]$";
+            String nameReg = "^[\\u4e00-\\u9fa5_a-zA-Z]+$";
             String rByrName = req.getParameter("rByrName");
             if (rByrName == null || rByrName.trim().isEmpty()) {
                 errorMsgs.put("rByrName", "訂購人姓名 : 請勿空白!");
-            } else if (!rByrName.equals(nameReg)) {
+            } else if (!rByrName.matches(nameReg)) {
                 errorMsgs.put("rByrName", "訂購人姓名 : 只能是中文或英文!");
             }
 
@@ -380,16 +348,16 @@ public class RentalOrderController extends HttpServlet {
             String rByrPhone = req.getParameter("rByrPhone");
             if (rByrPhone == null || rByrPhone.trim().isEmpty()) {
                 errorMsgs.put("rByrPhone", "訂購人手機號碼 : 請勿空白!");
-            } else if (!rByrPhone.equals(phoneReg)) {
+            } else if (!rByrPhone.matches(phoneReg)) {
                 errorMsgs.put("rByrPhone", "訂購人手機號碼 : 請輸入09開頭的10位數字!");
             }
 
             // 檢查訂購人 Email
-            String emailReg = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+            String emailReg = "^[a-zA-z0-9]+@[a-zA-Z]+\\.[a-zA-Z]+$";
             String rByrEmail = req.getParameter("rByrEmail");
             if (rByrEmail == null || rByrEmail.trim().isEmpty()) {
                 errorMsgs.put("rRcvName", "Email : 請勿空白!");
-            } else if (!rByrPhone.equals(emailReg)) {
+            } else if (!rByrEmail.matches(emailReg)) {
                 errorMsgs.put("rByrEmail", "Email : 格式不正確喔!");
             }
 
@@ -397,7 +365,7 @@ public class RentalOrderController extends HttpServlet {
             String rRcvName = req.getParameter("rRcvName");
             if (rRcvName == null || rRcvName.trim().isEmpty()) {
                 errorMsgs.put("rRcvName", "收件人姓名 : 請勿空白!");
-            } else if (!rRcvName.equals(nameReg)) {
+            } else if (!rRcvName.matches(nameReg)) {
                 errorMsgs.put("rRcvName", "收件人姓名 : 只能是中文或英文!");
             }
 
@@ -405,24 +373,29 @@ public class RentalOrderController extends HttpServlet {
             String rRcvPhone = req.getParameter("rRcvPhone");
             if (rByrPhone == null || rByrPhone.trim().isEmpty()) {
                 errorMsgs.put("rByrPhone", "收件人手機號碼 : 請勿空白!");
-            } else if (!rByrPhone.equals(phoneReg)) {
+            } else if (!rByrPhone.matches(phoneReg)) {
                 errorMsgs.put("rByrPhone", "收件人手機號碼 : 請輸入09開頭的10位數字!");
             }
 
             // 檢查取貨方式
             Byte rTakeMethod = null;
             try {
+                System.out.println(req.getParameter("rTakeMethod"));
                 rTakeMethod = Byte.valueOf(req.getParameter("rTakeMethod"));
+                System.out.println(rTakeMethod);
+                if (rTakeMethod == 0) {
+                    errorMsgs.put("rTakeMethod", "取貨方式 : 請選擇一種取貨方式!");
+                }
             } catch (NumberFormatException e) {
-                throw new RuntimeException(e);
+                errorMsgs.put("rTakeMethod", "取貨方式 : 請選擇一種取貨方式!");
             }
 
             // 檢查宅配住址
-            String addrReg = "^[\\u4e00-\\u9fa5a0-9]{10,100}$";
+            String addrReg = "^[\\u4e00-\\u9fa5a0-9]{1,100}$";
             String rAddr = req.getParameter("rAddr");
             if (rAddr == null || rAddr.trim().isEmpty()) {
                 errorMsgs.put("rAddr", "宅配地址 : 請勿空白!");
-            } else if (!rAddr.equals(addrReg)) {
+            } else if (!rAddr.matches(addrReg)) {
                 errorMsgs.put("rAddr", "宅配地址 : 格式不正確喔!");
             }
 
@@ -430,12 +403,14 @@ public class RentalOrderController extends HttpServlet {
             Byte rPayMethod = null;
             try {
                 rPayMethod = Byte.valueOf(req.getParameter("rPayMethod"));
+                if (rPayMethod == 0) {
+                    errorMsgs.put("rTakeMethod", "付款方式 : 請選擇一種付款方式!");
+                }
             } catch (NumberFormatException e) {
-                throw new RuntimeException(e);
+                errorMsgs.put("rTakeMethod", "付款方式 : 請選擇一種付款方式!");
             }
 
             // 檢查訂單總金額
-//            String priceReg = "^\\d{1,6}$";
             BigDecimal rAllPrice = null;
             try {
                 rAllPrice = new BigDecimal(req.getParameter("rAllPrice"));
@@ -458,20 +433,16 @@ public class RentalOrderController extends HttpServlet {
             // 檢查下單時間 (不需要檢查)
             Timestamp rOrdTime = new Timestamp(currentTimeMillis());
 
-//            Timestamp rOrdTime = null;
-//            try {
-//                rOrdTime = Timestamp.valueOf(req.getParameter("rOrdTime"));
-//            } catch (IllegalArgumentException e) {
-//                rOrdTime = new Timestamp(currentTimeMillis());
-//                errorMsgs.put("rOrdTime", "下單時間 : 請輸入日期!");
-//            }
-
             // 檢查預計租借日期
             Timestamp rDate = null;
             try {
-                rDate = Timestamp.valueOf(req.getParameter("rDate"));
+
+                String rDate_str = req.getParameter("rDate");
+                String str2 = rDate_str + ":00.00";
+                rDate = Timestamp.valueOf(str2.replace("T", " "));
+                System.out.println(rDate);
+
             } catch (IllegalArgumentException e) {
-//                rDate = new Timestamp(currentTimeMillis());
                 errorMsgs.put("rDate", "預計租借日期 : 請輸入日期!");
             }
 
@@ -480,12 +451,23 @@ public class RentalOrderController extends HttpServlet {
             // 檢查預計歸還日期
             Timestamp rBackDate = null;
             try {
-                rBackDate = Timestamp.valueOf(req.getParameter("rBackDate"));
+
+                String rBackDate_str = req.getParameter("rBackDate");
+                String str2 = rBackDate_str + ":00.00";
+                rBackDate = Timestamp.valueOf(str2.replace("T", " "));
+                System.out.println(rBackDate);
+
+
             } catch (IllegalArgumentException e) {
-//                rBackDate = new Timestamp(currentTimeMillis());
                 errorMsgs.put("rBackDate", "預計歸還日期 : 請輸入日期!");
             }
-            int result = rBackDate.compareTo(rDate);
+            int result = 0;
+            try {
+                result = rBackDate.compareTo(rDate);
+            } catch (NullPointerException e) {
+                System.out.println("吃到exception了");
+            }
+
             if (result < 0) {
                 errorMsgs.put("rBackDate", "預計歸還日期 : 不可早於預計租借日期!");
             } else if (result == 0) {
@@ -497,36 +479,31 @@ public class RentalOrderController extends HttpServlet {
             Timestamp rRealBackDate = new Timestamp(currentTimeMillis());
 
             /* 檢查付款狀態 (不需要檢查，應該是依據訂購人在訂購當下付款與否而定)
-             *
              * 若當下付款，則自動設為 1
              * 若當下沒有付款，則自動設為 0 ，待付款後自動更新訂單，設為 1
-             *
              */
             Byte rPayStat = Byte.valueOf(req.getParameter("rPayStat"));
 
+
+
             // 檢查訂單狀態 (不需要檢查，初始狀態就是 40(訂單成立))
             Byte rOrdStat = Byte.valueOf(req.getParameter("rOrdStat"));
-
             // 檢查歸還狀態 (不需要檢查，初始狀態就是 0(未歸還)，歸還後更新訂單為 1)
             Byte rtnStat = Byte.valueOf(req.getParameter("rtnStat"));
-
             /* 檢查歸還註記
-             *
              * 創建訂單時，預設前端傳送過來的請求，帶有參數"尚未歸還"
              * 實際歸還時才需檢查，由員工手動輸入歸還註記
-             *
              */
-            String rtnRemark = req.getParameter("rtnRemark");
+            String rtnRemark = null;
+            rtnRemark = req.getParameter("rtnRemark");
             if (rtnRemark == null || rtnRemark.trim().isEmpty()) {
                 errorMsgs.put("rtnRemark", "歸還註記 : 請勿空白!");
             }
 
             /* 檢查賠償金額
-             *
              * 創建訂單時，預設前端傳送過來的請求，帶有參數 0
              * 實際歸還時才需檢查，由員工手動輸入賠償金額
              * 若有損壞，則必須有賠償金額
-             *
              */
             BigDecimal rtnCompensation = null;
             try {
@@ -589,26 +566,47 @@ public class RentalOrderController extends HttpServlet {
             req.setAttribute("errorMsgs", errorMsgs);
 
             /***************************1.接收請求參數****************************************/
+            // 租借訂單號碼
             Integer rOrdNo = Integer.valueOf(req.getParameter("rOrdNo"));
+            // 會員編號
 //            Integer memNo = Integer.valueOf(req.getParameter("memNo"));
+//            // 訂購人姓名
 //            String rByrName = req.getParameter("rByrName");
+//            // 訂購人手機號碼
 //            String rByrPhone = req.getParameter("rByrPhone");
+//            // 訂購人 Email
 //            String rByrEmail = req.getParameter("rByrEmail");
+//            // 收件人姓名
 //            String rRcvName = req.getParameter("rRcvName");
+//            // 收件人手機號碼
 //            String rRcvPhone = req.getParameter("rRcvPhone");
+//            // 取貨方式
 //            Byte rTakeMethod = Byte.valueOf(req.getParameter("rTakeMethod"));
+//            // 宅配地址
 //            String rAddr = req.getParameter("rAddr");
+//            // 付款方式
 //            Byte rPayMethod = Byte.valueOf(req.getParameter("rPayMethod"));
+//            // 訂單總金額
 //            BigDecimal rAllPrice = new BigDecimal(req.getParameter("rAllPrice"));
+//            // 押金總金額
 //            BigDecimal rAllDepPrice = new BigDecimal(req.getParameter("rAllDepPrice"));
+//            // 下單日期
 //            Timestamp rOrdTime = Timestamp.valueOf(req.getParameter("rOrdTime"));
+//            // 預計租借日期
 //            Timestamp rDate = Timestamp.valueOf(req.getParameter("rDate"));
+//            // 預計歸還日期
 //            Timestamp rBackDate = Timestamp.valueOf(req.getParameter("rBackDate"));
-//            Timestamp rRealBackDate = Timestamp.valueOf(req.getParameter("rRealBackDate"));
+//            // 付款狀態
 //            Byte rPayStat = Byte.valueOf(req.getParameter("rPayStat"));
+//            // 實際歸還日期
+//            Timestamp rRealBackDate = Timestamp.valueOf(req.getParameter("rRealBackDate"));
+//            // 訂單狀態
 //            Byte rOrdStat = Byte.valueOf(req.getParameter("rOrdStat"));
+//            // 歸還狀態
 //            Byte rtnStat = Byte.valueOf(req.getParameter("rtnStat"));
+//            // 檢查歸還註記
 //            String rtnRemark = req.getParameter("rtnRemark");
+//            // 賠償金額
 //            BigDecimal rtnCompensation = new BigDecimal(req.getParameter("rtnCompensation"));
 
             /***************************2.開始查詢資料****************************************/

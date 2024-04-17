@@ -42,7 +42,7 @@ public class RentalOrderDaoImpl implements RentalOrderDao {
 /* 以下方法按照 增、刪、改、查 排列 */
 
     @Override
-    public int insert(RentalOrderVo rentalOrderVo) {
+    public void insert(RentalOrderVo rentalOrderVo) {
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -77,13 +77,13 @@ public class RentalOrderDaoImpl implements RentalOrderDao {
 			pstmt.executeUpdate();
 
             // 新增訂單後，取得自動生成的 OrdNo
-            ResultSet rs = pstmt.getGeneratedKeys();
-            if (rs.next()) {
-                int rOrdNo = rs.getInt(1);
-                return rOrdNo;
-            } else {
-                return (-1);
-            }
+//            ResultSet rs = pstmt.getGeneratedKeys();
+//            if (rs.next()) {
+//                int rOrdNo = rs.getInt(1);
+//                return rOrdNo;
+//            } else {
+//                return (-1);
+//            }
 
 		} catch (ClassNotFoundException e) {
             throw new RuntimeException("Couldn't load database driver. "
