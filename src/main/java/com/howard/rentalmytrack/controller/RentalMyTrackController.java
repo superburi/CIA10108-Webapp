@@ -202,7 +202,7 @@ public class RentalMyTrackController extends HttpServlet {
 				
 			/***************************3.修改完成,準備轉交(Send the Success view)*************/
 			req.setAttribute("trackVO", rentalMyTrackVO); // 資料庫update成功後,正確的的empVO物件,存入req
-			String url = "listOneTrack.jsp";
+			String url = "listAllTrack.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneEmp.jsp
 			successView.forward(req, res);
 				

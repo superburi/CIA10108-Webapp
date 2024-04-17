@@ -2,7 +2,8 @@
 <%@ page import="com.howard.rentalmytrack.vo.RentalMyTrackVo"%>
 
 <%
-	RentalMyTrackVo rentalMyTrackVO = (RentalMyTrackVo) request.getAttribute("rentalMyTrackVO");
+	RentalMyTrackVo rentalMyTrackVO = (RentalMyTrackVo) request.getAttribute("trackVO");
+    pageContext.setAttribute("rentalMyTrackVO", rentalMyTrackVO);
 %>
 
 <html>
