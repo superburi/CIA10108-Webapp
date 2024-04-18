@@ -1,5 +1,6 @@
 package com.howard.rentalorder.controller;
 
+import com.google.gson.Gson;
 import com.howard.rentalorder.service.RentalOrderService;
 import com.howard.rentalorder.vo.RentalOrderVo;
 import javax.servlet.RequestDispatcher;
@@ -9,12 +10,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import static java.lang.System.currentTimeMillis;
+import static java.lang.System.out;
 
 
 @WebServlet("/rentalorder/RentalOrderController")
@@ -31,7 +35,8 @@ public class RentalOrderController extends HttpServlet {
 
         req.setCharacterEncoding("UTF-8");
         String action = req.getParameter("action");
-
+//        res.setContentType("application/json");
+//        PrintWriter out = res.getWriter();
 
         // 來自新增頁面(addTrack.jsp)，新增追蹤品的請求
         if ("insert".equals(action)) {
@@ -623,7 +628,7 @@ public class RentalOrderController extends HttpServlet {
         } // 所有訂單頁面的修改結束
 
 //
-		// 來自首頁(select_page.jsp)，查詢單筆的請求
+		// 來自首頁(select_page.jsp)，用訂單號碼查詢單筆的請求
 		if ("getOne_For_Display".equals(action)) {
 
 			Map<String, String> errorMsgs = new LinkedHashMap<String, String>();
@@ -651,6 +656,16 @@ public class RentalOrderController extends HttpServlet {
 			/***************************2.開始查詢資料*****************************************/
 			RentalOrderService rentalOrderService = new RentalOrderService();
 			RentalOrderVo rentalOrderVo = rentalOrderService.getOneOrder(rOrdNo);
+
+            /*========實驗========*/
+//            System.out.println(rentalOrderVo);
+//            Gson gson = new Gson();
+//            String jsonRentalOrder = gson.toJson(rentalOrderVo);
+//            System.out.println(jsonRentalOrder);
+//            out.print(jsonRentalOrder);
+
+            /*========實驗========*/
+
 			if (rentalOrderVo == null) {
 				errorMsgs.put("noData", "查無資料");
 			}
@@ -661,13 +676,106 @@ public class RentalOrderController extends HttpServlet {
 				return;//程式中斷
 			}
 
+
+
 			/***************************3.查詢完成,準備轉交(Send the Success view)*************/
 			req.setAttribute("rentalOrderVo", rentalOrderVo); // 資料庫取出的empVO物件,存入req
 			String url = "listOneOrder.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneEmp.jsp
 			successView.forward(req, res);
 
-		} // 查詢單筆結束
+		} // 用訂單號碼查詢單筆結束
+
+        // 來自首頁(select_page.jsp)，用訂購人姓名查詢訂單的請求
+        if ("getAll_For_Display_ByName".equals(action)) {
+
+            Map<String, String> errorMsgs = new LinkedHashMap<String, String>();
+            req.setAttribute("errorMsgs", errorMsgs);
+
+            /***************************1.接收請求參數、輸入格式的錯誤處理**********************/
+
+            // 檢查訂購人姓名
+            String nameReg = "^[\\u4e00-\\u9fa5aa-zA-Z]{1,100}$";
+            String rByrName = req.getParameter("rByrName");
+            if (rByrName == null || rByrName.trim().isEmpty()) {
+                errorMsgs.put("rByrName", "訂購人姓名 : 請勿空白!");
+            } else if (!rByrName.matches(nameReg)) {
+                errorMsgs.put("rByrName", "訂購人姓名 : 請填中文或英文!");
+            }
+
+            if (!errorMsgs.isEmpty()) {
+                RequestDispatcher failureView = req
+                        .getRequestDispatcher("select_page.jsp");
+                failureView.forward(req, res);
+                return;//程式中斷
+            }
+
+            /***************************2.開始查詢資料*****************************************/
+            RentalOrderService rentalOrderService = new RentalOrderService();
+            List<RentalOrderVo> rentalOrderVoList = rentalOrderService.getOrderByName(rByrName);
+            if (rentalOrderVoList == null || rentalOrderVoList.isEmpty()) {
+                errorMsgs.put("noData", "查無資料");
+            }
+            if (!errorMsgs.isEmpty()) {
+                RequestDispatcher failureView = req
+                        .getRequestDispatcher("select_page.jsp");
+                failureView.forward(req, res);
+                return;//程式中斷
+            }
+
+            /***************************3.查詢完成,準備轉交(Send the Success view)*************/
+            req.setAttribute("rentalOrderVoList", rentalOrderVoList); // 資料庫取出的empVO物件,存入req
+            String url = "/rentalorder/listOrdersSearchOn.jsp";
+            RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneEmp.jsp
+            successView.forward(req, res);
+
+        } // 用訂購人姓名查詢訂單結束
+
+        // 來自首頁(select_page.jsp)，用會員編號查詢訂單的請求
+        if ("getAll_For_Display_ByMemNo".equals(action)) {
+
+            Map<String, String> errorMsgs = new LinkedHashMap<String, String>();
+            req.setAttribute("errorMsgs", errorMsgs);
+
+            /***************************1.接收請求參數、輸入格式的錯誤處理**********************/
+
+            // 檢查會員編號
+            Integer memNo = null;
+            try {
+                memNo = Integer.valueOf(req.getParameter("memNo"));
+            } catch (NumberFormatException e) {
+                errorMsgs.put("memNo", "會員編號 : 請填數字!");
+            } catch (NullPointerException nullPointerException) {
+                errorMsgs.put("memNo", "會員編號 : 不能空白!");
+            }
+
+            if (!errorMsgs.isEmpty()) {
+                RequestDispatcher failureView = req
+                        .getRequestDispatcher("select_page.jsp");
+                failureView.forward(req, res);
+                return;//程式中斷
+            }
+
+            /***************************2.開始查詢資料*****************************************/
+            RentalOrderService rentalOrderService = new RentalOrderService();
+            List<RentalOrderVo> rentalOrderVoList = rentalOrderService.getOrderByMemNo(memNo);
+            if (rentalOrderVoList == null || rentalOrderVoList.isEmpty()) {
+                errorMsgs.put("noData", "查無資料");
+            }
+            if (!errorMsgs.isEmpty()) {
+                RequestDispatcher failureView = req
+                        .getRequestDispatcher("select_page.jsp");
+                failureView.forward(req, res);
+                return;//程式中斷
+            }
+
+            /***************************3.查詢完成,準備轉交(Send the Success view)*************/
+            req.setAttribute("rentalOrderVoList", rentalOrderVoList); // 資料庫取出的empVO物件,存入req
+            String url = "/rentalorder/listOrdersSearchOn.jsp";
+            RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneEmp.jsp
+            successView.forward(req, res);
+
+        } // 用會員編號查詢訂單結束
 
     } // doPost 結束
 

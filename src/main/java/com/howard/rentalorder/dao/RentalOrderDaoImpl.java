@@ -22,21 +22,14 @@ public class RentalOrderDaoImpl implements RentalOrderDao {
     private static final String UPDATE = "UPDATE rentalorder SET memNo = ?, rByrName = ?, rByrPhone = ?, " +
             "rByrEmail = ?, rRcvName = ?, rRcvPhone = ?, rTakeMethod = ?, rAddr = ?, rPayMethod = ?, " +
             "rAllPrice = ?, rAllDepPrice = ?, rOrdTime = ?, rDate = ?, rBackDate = ?, rRealBackDate = ?, " +
-            "rPayStat = ?, rOrdStat = ?, rtnStat = ?, rtnRemark = ?, rtnCompensation = ? WHERE rOrdNo = ?";
-    private static final String GET_ONE = "SELECT rOrdNo, memNo, rByrName, rByrPhone, rByrEmail, rRcvName, " +
-            "rRcvPhone, rTakeMethod, rAddr, rPayMethod, rAllPrice, rAllDepPrice, rOrdTime, rDate, rBackDate, " +
-            "rRealBackDate, rPayStat, rOrdStat, rtnStat, rtnRemark, rtnCompensation " +
-            "FROM rentalorder " +
+            "rPayStat = ?, rOrdStat = ?, rtnStat = ?, rtnRemark = ?, rtnCompensation = ? " +
             "WHERE rOrdNo = ?";
-    private static final String GET_ONE_ON_NAME = "SELECT rOrdNo, memNo, rByrName, rByrPhone, rByrEmail, rRcvName, " +
+    private static final String GET_ON_ANY = "SELECT rOrdNo, memNo, rByrName, rByrPhone, rByrEmail, rRcvName, " +
             "rRcvPhone, rTakeMethod, rAddr, rPayMethod, rAllPrice, rAllDepPrice, rOrdTime, rDate, rBackDate, " +
             "rRealBackDate, rPayStat, rOrdStat, rtnStat, rtnRemark, rtnCompensation " +
             "FROM rentalorder " +
-            "WHERE rByrName = ?";
-    private static final String GET_ALL = "SELECT rOrdNo, memNo, rByrName, rByrPhone, rByrEmail, rRcvName, " +
-            "rRcvPhone, rTakeMethod, rAddr, rPayMethod, rAllPrice, rAllDepPrice, rOrdTime, rDate, rBackDate, " +
-            "rRealBackDate, rPayStat, rOrdStat, rtnStat, rtnRemark, rtnCompensation " +
-            "FROM rentalorder";
+            "WHERE 1=1";
+    private static final String COUNT_ON_ANY = "SELECT COUNT(*) FROM rentalorder WHERE 1=1";
 
 
 /* 以下方法按照 增、刪、改、查 排列 */
@@ -231,7 +224,7 @@ public class RentalOrderDaoImpl implements RentalOrderDao {
 
             Class.forName(driver);
             con = DriverManager.getConnection(url, userid, passwd);
-            pstmt = con.prepareStatement(GET_ONE);
+            pstmt = con.prepareStatement(GET_ON_ANY + " AND rOrdNo = ?");
 
             pstmt.setInt(1, rOrdNo);
 
@@ -313,9 +306,9 @@ public class RentalOrderDaoImpl implements RentalOrderDao {
 
             Class.forName(driver);
             con = DriverManager.getConnection(url, userid, passwd);
-            pstmt = con.prepareStatement(GET_ONE_ON_NAME);
+            pstmt = con.prepareStatement(GET_ON_ANY + " AND rByrName LIKE ?");
 
-            pstmt.setString(1, rByrName);
+            pstmt.setString(1, "%" + rByrName + "%");
 
             rs = pstmt.executeQuery();
 
@@ -385,9 +378,9 @@ public class RentalOrderDaoImpl implements RentalOrderDao {
     } // fingByName 結束
 
     @Override
-    public List<RentalOrderVo> getAll() {
+    public List<RentalOrderVo> findByMemNo(Integer memNo) {
 
-        List<RentalOrderVo> rentalOrderVoList = new ArrayList<RentalOrderVo>();
+        List<RentalOrderVo> rentalOrderVoList = new ArrayList<>();
         RentalOrderVo rentalOrderVo = null;
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -397,7 +390,10 @@ public class RentalOrderDaoImpl implements RentalOrderDao {
 
             Class.forName(driver);
             con = DriverManager.getConnection(url, userid, passwd);
-            pstmt = con.prepareStatement(GET_ALL);
+            pstmt = con.prepareStatement(GET_ON_ANY + " AND memNo = ?");
+
+            pstmt.setInt(1, memNo);
+
             rs = pstmt.executeQuery();
 
             while(rs.next()) {
@@ -417,7 +413,87 @@ public class RentalOrderDaoImpl implements RentalOrderDao {
                 rentalOrderVo.setrAllDepPrice(rs.getBigDecimal("rAllDepPrice"));
                 rentalOrderVo.setrOrdTime(rs.getTimestamp("rOrdTime"));
                 rentalOrderVo.setrDate(rs.getTimestamp("rDate"));
-                System.out.println(rs.getTimestamp("rDate"));
+                rentalOrderVo.setrBackDate(rs.getTimestamp("rBackDate"));
+                rentalOrderVo.setrRealBackDate(rs.getTimestamp("rRealBackDate"));
+                rentalOrderVo.setrPayStat(rs.getByte("rPayStat"));
+                rentalOrderVo.setrOrdStat(rs.getByte("rOrdStat"));
+                rentalOrderVo.setRtnStat(rs.getByte("rtnStat"));
+                rentalOrderVo.setRtnRemark(rs.getString("rtnRemark"));
+                rentalOrderVo.setRtnCompensation(rs.getBigDecimal("rtnCompensation"));
+
+                rentalOrderVoList.add(rentalOrderVo);
+
+            }
+
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Couldn't load database driver. "
+                    + e.getMessage());
+            // Handle any SQL errors
+        } catch (SQLException se) {
+            throw new RuntimeException("A database error occured. "
+                    + se.getMessage());
+            // Clean up JDBC resources
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException se) {
+                    se.printStackTrace(System.err);
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException se) {
+                    se.printStackTrace(System.err);
+                }
+            }
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (Exception e) {
+                    e.printStackTrace(System.err);
+                }
+            }
+        }
+
+        return rentalOrderVoList;
+
+    }
+
+    @Override
+    public List<RentalOrderVo> getAll() {
+
+        List<RentalOrderVo> rentalOrderVoList = new ArrayList<RentalOrderVo>();
+        RentalOrderVo rentalOrderVo = null;
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+
+            Class.forName(driver);
+            con = DriverManager.getConnection(url, userid, passwd);
+            pstmt = con.prepareStatement(GET_ON_ANY);
+            rs = pstmt.executeQuery();
+
+            while(rs.next()) {
+
+                rentalOrderVo = new RentalOrderVo();
+                rentalOrderVo.setrOrdNo(rs.getInt("rOrdNo"));
+                rentalOrderVo.setMemNo(rs.getInt("memNo"));
+                rentalOrderVo.setrByrName(rs.getString("rByrName"));
+                rentalOrderVo.setrByrPhone(rs.getString("rByrPhone"));
+                rentalOrderVo.setrByrEmail(rs.getString("rByrEmail"));
+                rentalOrderVo.setrRcvName(rs.getString("rRcvName"));
+                rentalOrderVo.setrRcvPhone(rs.getString("rRcvPhone"));
+                rentalOrderVo.setrTakeMethod(rs.getByte("rTakeMethod"));
+                rentalOrderVo.setrAddr(rs.getString("rAddr"));
+                rentalOrderVo.setrPayMethod(rs.getByte("rPayMethod"));
+                rentalOrderVo.setrAllPrice(rs.getBigDecimal("rAllPrice"));
+                rentalOrderVo.setrAllDepPrice(rs.getBigDecimal("rAllDepPrice"));
+                rentalOrderVo.setrOrdTime(rs.getTimestamp("rOrdTime"));
+                rentalOrderVo.setrDate(rs.getTimestamp("rDate"));
                 rentalOrderVo.setrBackDate(rs.getTimestamp("rBackDate"));
                 rentalOrderVo.setrRealBackDate(rs.getTimestamp("rRealBackDate"));
                 rentalOrderVo.setrPayStat(rs.getByte("rPayStat"));
@@ -465,5 +541,161 @@ public class RentalOrderDaoImpl implements RentalOrderDao {
         return rentalOrderVoList;
 
     } // getAll 結束
+
+    @Override
+    public int countBy(String rByrName, Integer memNo) {
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        int count = 0;
+        // 如果用會員編號查總筆數
+        if (rByrName.equals("#")) {
+
+            try {
+
+                Class.forName(driver);
+                con = DriverManager.getConnection(url, userid, passwd);
+                pstmt = con.prepareStatement(COUNT_ON_ANY + " AND memNo = ?");
+
+                pstmt.setInt(1, memNo);
+
+                rs = pstmt.executeQuery();
+
+                if (rs.next()) {
+                    count = rs.getInt(1); // 使用索引 1 獲取結果集的第一列數值
+                }
+
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException("Couldn't load database driver. "
+                        + e.getMessage());
+                // Handle any SQL errors
+            } catch (SQLException se) {
+                throw new RuntimeException("A database error occured. "
+                        + se.getMessage());
+                // Clean up JDBC resources
+            } finally {
+                if (rs != null) {
+                    try {
+                        rs.close();
+                    } catch (SQLException se) {
+                        se.printStackTrace(System.err);
+                    }
+                }
+                if (pstmt != null) {
+                    try {
+                        pstmt.close();
+                    } catch (SQLException se) {
+                        se.printStackTrace(System.err);
+                    }
+                }
+                if (con != null) {
+                    try {
+                        con.close();
+                    } catch (Exception e) {
+                        e.printStackTrace(System.err);
+                    }
+                }
+            }
+
+        }
+        // 如果用訂購人姓名查總筆數
+        if (memNo == -99999) {
+
+            try {
+
+                Class.forName(driver);
+                con = DriverManager.getConnection(url, userid, passwd);
+                pstmt = con.prepareStatement(COUNT_ON_ANY + " AND rByrName LIKE ?");
+
+                pstmt.setString(1, "%" + rByrName + "%");
+
+                rs = pstmt.executeQuery();
+
+                if (rs.next()) {
+                    count = rs.getInt(1); // 使用索引 1 獲取結果集的第一列數值
+                }
+
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException("Couldn't load database driver. "
+                        + e.getMessage());
+                // Handle any SQL errors
+            } catch (SQLException se) {
+                throw new RuntimeException("A database error occured. "
+                        + se.getMessage());
+                // Clean up JDBC resources
+            } finally {
+                if (rs != null) {
+                    try {
+                        rs.close();
+                    } catch (SQLException se) {
+                        se.printStackTrace(System.err);
+                    }
+                }
+                if (pstmt != null) {
+                    try {
+                        pstmt.close();
+                    } catch (SQLException se) {
+                        se.printStackTrace(System.err);
+                    }
+                }
+                if (con != null) {
+                    try {
+                        con.close();
+                    } catch (Exception e) {
+                        e.printStackTrace(System.err);
+                    }
+                }
+            }
+
+        }
+        // 如果無條件查總筆數
+        try {
+
+            Class.forName(driver);
+            con = DriverManager.getConnection(url, userid, passwd);
+            pstmt = con.prepareStatement(COUNT_ON_ANY);
+
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                count = rs.getInt(1); // 使用索引 1 獲取第一列數值
+            }
+
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Couldn't load database driver. "
+                    + e.getMessage());
+            // Handle any SQL errors
+        } catch (SQLException se) {
+            throw new RuntimeException("A database error occured. "
+                    + se.getMessage());
+            // Clean up JDBC resources
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException se) {
+                    se.printStackTrace(System.err);
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException se) {
+                    se.printStackTrace(System.err);
+                }
+            }
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (Exception e) {
+                    e.printStackTrace(System.err);
+                }
+            }
+        }
+
+        return count;
+    }
 
 }

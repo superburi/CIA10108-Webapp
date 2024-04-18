@@ -16,6 +16,10 @@ public interface RentalOrderDao {
 
     List<RentalOrderVo> findByName(String rByrName);
 
+	List<RentalOrderVo> findByMemNo(Integer memNo);
+
 	List<RentalOrderVo> getAll();
+
+	int countBy(String rByrName, Integer memNo);
 
 }

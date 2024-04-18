@@ -41,7 +41,36 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-	
+
+
+
+	  <dependency>
+		  <groupId>org.hibernate</groupId>
+		  <artifactId>hibernate-core</artifactId>
+		   <version>5.6.9.Final</version>
+	  </dependency>
+
+	  <!-- hibernate-c3p0 連線池 -->                          <!-- spring-boot 已內建依賴，但預設未下載 -->
+	  <dependency>
+		  <groupId>org.hibernate</groupId>
+		  <artifactId>hibernate-c3p0</artifactId>
+		   <version>5.6.9.Final</version>
+	  </dependency>
+
+	  <!-- hibernate-proxool 連線池 -->                       <!-- spring-boot 已內建依賴，但預設未下載 -->
+	  <dependency>
+		  <groupId>org.hibernate</groupId>
+		  <artifactId>hibernate-proxool</artifactId>
+		   <version>5.6.9.Final</version>
+	  </dependency>
+
+	  <dependency>
+		  <groupId>com.google.code.gson</groupId>
+		  <artifactId>gson</artifactId>
+		  <version>2.9.0</version>
+	  </dependency>
+
+
   </dependencies>
   
   

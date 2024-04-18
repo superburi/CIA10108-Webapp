@@ -59,10 +59,28 @@
 
     <li>
         <FORM METHOD="post" ACTION="${pageContext.request.contextPath}/rentalorder/RentalOrderController">
-            <b>輸入租借品訂單編號 : </b>
+            <b>用租借品訂單編號查訂單 : </b>
             <input type="text" name="rOrdNo" value="" required>
             <br>
             <input type="hidden" name="action" value="getOne_For_Display">
+            <input type="submit" value="送出">
+        </FORM>
+    </li>
+    <li>
+        <FORM METHOD="post" ACTION="${pageContext.request.contextPath}/rentalorder/RentalOrderController">
+            <b>用訂購人姓名查訂單 : </b>
+            <input type="text" name="rByrName" value="" required>
+            <br>
+            <input type="hidden" name="action" value="getAll_For_Display_ByName">
+            <input type="submit" value="送出">
+        </FORM>
+    </li>
+    <li>
+        <FORM METHOD="post" ACTION="${pageContext.request.contextPath}/rentalorder/RentalOrderController">
+            <b>用會員編號查訂單 : </b>
+            <input type="text" name="memNo" value="" required>
+            <br>
+            <input type="hidden" name="action" value="getAll_For_Display_ByMemNo">
             <input type="submit" value="送出">
         </FORM>
     </li>

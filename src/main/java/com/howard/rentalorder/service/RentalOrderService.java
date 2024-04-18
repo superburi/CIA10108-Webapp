@@ -142,13 +142,21 @@ public class RentalOrderService {
 		return dao.findByPK(rOrdNo);
 	}
 
-	public List<RentalOrderVo> getOneOrderByName(String rByrName) {
+	public List<RentalOrderVo> getOrderByName(String rByrName) {
 		return dao.findByName(rByrName);
+	}
+
+	public List<RentalOrderVo> getOrderByMemNo(Integer memNo) {
+		return dao.findByMemNo(memNo);
 	}
 
 
 	public List<RentalOrderVo> getAll() {
 		return dao.getAll();
+	}
+
+	public int countBy(String rByrName, Integer memNo) {
+		return dao.countBy(rByrName, memNo);
 	}
 
 
