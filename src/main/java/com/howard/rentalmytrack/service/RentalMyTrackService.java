@@ -47,8 +47,8 @@ public class RentalMyTrackService {
 		RentalMyTrackVo rmt = new RentalMyTrackVo();
 
 		rmt.setrNo(rNo);
-		rmt.setmemNo(memNo);
-		rmt.setexpRentalDate(expRentalDate);
+		rmt.setMemNo(memNo);
+		rmt.setExpRentalDate(expRentalDate);
 		dao.insert(rmt);
 		Timestamp timestamp = dao.findByPK(rNo, memNo).getrTrackTime();
 		rmt.setrTrackTime(timestamp);
@@ -63,13 +63,13 @@ public class RentalMyTrackService {
 	
 	
 	public RentalMyTrackVo updateTrack(Integer rNo, Integer memNo,
-									   Date expRentalDate) {
+                                           Date expRentalDate) {
 
 		RentalMyTrackVo rmt = new RentalMyTrackVo();
 
 		rmt.setrNo(rNo);
-		rmt.setmemNo(memNo);
-		rmt.setexpRentalDate(expRentalDate);
+		rmt.setMemNo(memNo);
+		rmt.setExpRentalDate(expRentalDate);
 		
 		Timestamp timestamp = dao.findByPK(rNo, memNo).getrTrackTime();
 		rmt.setrTrackTime(timestamp);

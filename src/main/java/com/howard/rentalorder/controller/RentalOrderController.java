@@ -1,6 +1,5 @@
 package com.howard.rentalorder.controller;
 
-import com.google.gson.Gson;
 import com.howard.rentalorder.service.RentalOrderService;
 import com.howard.rentalorder.vo.RentalOrderVo;
 import javax.servlet.RequestDispatcher;
@@ -10,7 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
@@ -18,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 import static java.lang.System.currentTimeMillis;
-import static java.lang.System.out;
 
 
 @WebServlet("/rentalorder/RentalOrderController")

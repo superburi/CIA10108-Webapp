@@ -71,8 +71,8 @@ public class RentalMyTrackController extends HttpServlet {
 			RentalMyTrackVo rentalMyTrackVO = new RentalMyTrackVo();
 			
 			rentalMyTrackVO.setrNo(rNo == null? null : Integer.valueOf(rNo));
-			rentalMyTrackVO.setmemNo(memNo == null? null : Integer.valueOf(memNo));
-			rentalMyTrackVO.setexpRentalDate(expRentalDate);
+			rentalMyTrackVO.setMemNo(memNo == null? null : Integer.valueOf(memNo));
+			rentalMyTrackVO.setExpRentalDate(expRentalDate);
 
 			// Send the use back to the form, if there were errors
 			if (!errorMsgs.isEmpty()) {
@@ -183,8 +183,8 @@ public class RentalMyTrackController extends HttpServlet {
 			RentalMyTrackVo rentalMyTrackVO = new RentalMyTrackVo();
 			
 			rentalMyTrackVO.setrNo(rNo == null ? null : Integer.valueOf(rNo));
-			rentalMyTrackVO.setmemNo(memNo == null ? null : Integer.valueOf(memNo));
-			rentalMyTrackVO.setexpRentalDate(expRentalDate);
+			rentalMyTrackVO.setMemNo(memNo == null ? null : Integer.valueOf(memNo));
+			rentalMyTrackVO.setExpRentalDate(expRentalDate);
 
 			// Send the use back to the form, if there were errors
 			if (!errorMsgs.isEmpty()) {

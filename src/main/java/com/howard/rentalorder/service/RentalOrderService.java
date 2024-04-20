@@ -5,7 +5,6 @@ import com.howard.rentalorder.dao.RentalOrderDaoImpl;
 import com.howard.rentalorder.vo.RentalOrderVo;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -101,11 +100,11 @@ public class RentalOrderService {
 
 
 	public RentalOrderVo updateOrder(Integer rOrdNo, Integer memNo, String rByrName, String rByrPhone,
-									 String rByrEmail, String rRcvName, String rRcvPhone, Byte rTakeMethod,
-									 String rAddr, Byte rPayMethod, BigDecimal rAllPrice, BigDecimal rAllDepPrice,
-									 Timestamp rOrdTime, Timestamp rDate, Timestamp rBackDate,
-									 Timestamp rRealBackDate, Byte rPayStat, Byte rOrdStat, Byte rtnStat,
-									 String rtnRemark, BigDecimal rtnCompensation) {
+                                     String rByrEmail, String rRcvName, String rRcvPhone, Byte rTakeMethod,
+                                     String rAddr, Byte rPayMethod, BigDecimal rAllPrice, BigDecimal rAllDepPrice,
+                                     Timestamp rOrdTime, Timestamp rDate, Timestamp rBackDate,
+                                     Timestamp rRealBackDate, Byte rPayStat, Byte rOrdStat, Byte rtnStat,
+                                     String rtnRemark, BigDecimal rtnCompensation) {
 
 		RentalOrderVo rentalOrderVo = new RentalOrderVo();
 

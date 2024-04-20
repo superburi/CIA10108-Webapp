@@ -12,6 +12,7 @@ import java.util.List;
 import com.howard.rentalmytrack.vo.RentalMyTrackVo;
 
 
+
 public class RentalMyTrackDaoImpl implements RentalMyTrackDao {
 	
     String driver = "com.mysql.cj.jdbc.Driver";
@@ -40,11 +41,11 @@ public class RentalMyTrackDaoImpl implements RentalMyTrackDao {
             pstmt = con.prepareStatement(INSERT);
 			
 			pstmt.setInt(1, rmt.getrNo());
-			pstmt.setInt(2, rmt.getmemNo());
+			pstmt.setInt(2, rmt.getMemNo());
 			
 	        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 			pstmt.setTimestamp(3, timestamp);
-			pstmt.setDate(4, rmt.getexpRentalDate());
+			pstmt.setDate(4, rmt.getExpRentalDate());
 			
 			pstmt.executeUpdate();
 			
@@ -139,9 +140,9 @@ public class RentalMyTrackDaoImpl implements RentalMyTrackDao {
             con = DriverManager.getConnection(url, userid, passwd);
             pstmt = con.prepareStatement(UPDATE);
 			
-			pstmt.setDate(1, rmt.getexpRentalDate());
+			pstmt.setDate(1, rmt.getExpRentalDate());
 			pstmt.setInt(2, rmt.getrNo());
-			pstmt.setInt(3, rmt.getmemNo());
+			pstmt.setInt(3, rmt.getMemNo());
 			
 			
 			pstmt.executeUpdate();
@@ -197,9 +198,9 @@ public class RentalMyTrackDaoImpl implements RentalMyTrackDao {
             	
             	rmt = new RentalMyTrackVo();
 				rmt.setrNo(rs.getInt("rNo"));
-				rmt.setmemNo(rs.getInt("memNo"));
+				rmt.setMemNo(rs.getInt("memNo"));
 				rmt.setrTrackTime(rs.getTimestamp("rTrackTime"));
-				rmt.setexpRentalDate(rs.getDate("expRentalDate"));
+				rmt.setExpRentalDate(rs.getDate("expRentalDate"));
 				
             	
             }
@@ -260,9 +261,9 @@ public class RentalMyTrackDaoImpl implements RentalMyTrackDao {
             	
             	rmt = new RentalMyTrackVo();
 				rmt.setrNo(rs.getInt("rNo"));
-				rmt.setmemNo(rs.getInt("memNo"));
+				rmt.setMemNo(rs.getInt("memNo"));
 				rmt.setrTrackTime(rs.getTimestamp("rTrackTime"));
-				rmt.setexpRentalDate(rs.getDate("expRentalDate"));
+				rmt.setExpRentalDate(rs.getDate("expRentalDate"));
 				list.add(rmt);
             	
             }

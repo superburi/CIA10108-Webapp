@@ -1,33 +1,65 @@
 package com.howard.rentalorder.vo;
 
+import com.howard.rentalorderdetails.vo.RentalOrderDetails_ORM;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Set;
 
-public class RentalOrderVo {
+@Entity
+@Table(name = "rentalorder")
+public class RentalOrderVo_ORM implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "rOrdNo", updatable = false)
     private Integer rOrdNo; // -> 租借品訂單編號
+    @Column(name = "memNo")
     private Integer memNo; // -> 會員編號
+    @Column(name = "rByrName")
     private String rByrName; // -> 訂購人姓名
+    @Column(name = "rByrPhone")
     private String rByrPhone; // -> 訂購人手機號碼
+    @Column(name = "rByrEmail")
     private String rByrEmail; // -> 訂購人Email
+    @Column(name = "rRcvName")
     private String rRcvName; // -> 收件人姓名
+    @Column(name = "rRcvPhone")
     private String rRcvPhone; // -> 收件人手機號碼
+    @Column(name = "rTakeMethod")
     private byte rTakeMethod; // -> 取貨方式
+    @Column(name = "rAddr")
     private String rAddr; // -> 宅配住址
+    @Column(name = "rPayMethod")
     private byte rPayMethod; // -> 付款方式
+    @Column(name = "rAllPrice")
     private BigDecimal rAllPrice; // -> 訂單總金額
+    @Column(name = "rAllDepPrice")
     private BigDecimal rAllDepPrice; // -> 押金總金額
+    @Column(name = "rOrdTime")
     private Timestamp rOrdTime; // -> 下單時間
+    @Column(name = "rDate")
     private Timestamp rDate; // -> 預計租借日期
+    @Column(name = "rBackDate")
     private Timestamp rBackDate; // -> 預計歸還日期
+    @Column(name = "rRealBackDate")
     private Timestamp rRealBackDate; // -> 實際歸還日期
+    @Column(name = "rPayStat")
     private byte rPayStat; // -> 付款狀態
+    @Column(name = "rOrdStat")
     private byte rOrdStat; // -> 訂單狀態
+    @Column(name = "rtnStat")
     private byte rtnStat; // -> 歸還狀態
+    @Column(name = "rtnRemark")
     private String rtnRemark; // -> 歸還註記
+    @Column(name = "rtnCompensation")
     private BigDecimal rtnCompensation; // -> 賠償金額
 
+    @OneToMany(mappedBy = "rentalOrderVo", cascade = CascadeType.ALL)
+//    @OrderBy("rOrdNo asc")
+    private Set<RentalOrderDetails_ORM> detailsOrms;
 
 /*----------------------getter、setter--------------------------*/
 
@@ -198,5 +230,15 @@ public class RentalOrderVo {
     public void setRtnCompensation(BigDecimal rtnCompensation) {
         this.rtnCompensation = rtnCompensation;
     }
+
+/*--------------------------聯合映射用的 getter、setter( rentalorder 是主表)------------------------------*/
+    public Set<RentalOrderDetails_ORM> getDetailsOrms() {
+        return detailsOrms;
+    }
+
+    public void setDetailsOrms(Set<RentalOrderDetails_ORM> detailsOrms) {
+        this.detailsOrms = detailsOrms;
+    }
+
 
 }

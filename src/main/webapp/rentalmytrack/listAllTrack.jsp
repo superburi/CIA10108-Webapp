@@ -4,7 +4,6 @@
 <%@ page import="java.util.*"%>
 <%@ page import="com.howard.rentalmytrack.service.RentalMyTrackService" %>
 <%@ page import="com.howard.rentalmytrack.vo.RentalMyTrackVo" %>
-<%@ page import="com.howard.rentalmytrack.vo.RentalMyTrackVo" %>
 
 <%
 	RentalMyTrackService rentalMyTrackService = new RentalMyTrackService();
