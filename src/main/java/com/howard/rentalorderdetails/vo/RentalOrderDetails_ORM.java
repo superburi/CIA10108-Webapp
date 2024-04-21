@@ -1,9 +1,7 @@
 package com.howard.rentalorderdetails.vo;
 
-import com.howard.rentalmytrack.vo.RentalMyTrackVo_ORM;
-import com.howard.rentalorder.vo.RentalOrderVo;
 import com.howard.rentalorder.vo.RentalOrderVo_ORM;
-import com.howard.yu.rental.model.Rental;
+import com.yu.rental.model.Rental;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,6 +12,10 @@ import java.util.Objects;
 @Table(name = "rentalorderdetails")
 @IdClass(RentalOrderDetails_ORM.CompositeDetail.class)
 public class RentalOrderDetails_ORM implements Serializable{
+
+    public RentalOrderDetails_ORM() {
+
+    }
 
     /*
      * rOrdNo -> 租借品訂單編號
@@ -28,7 +30,8 @@ public class RentalOrderDetails_ORM implements Serializable{
     @Id
     @ManyToOne
     @JoinColumn(name = "rOrdNo", referencedColumnName = "rOrdNo")
-    private RentalOrderVo_ORM rentalOrderVo;
+    private RentalOrderVo_ORM rentalOrderVoOrm;
+
 //    @Id
 //    @Column(name = "rNo")
 //    private Integer rNo;
@@ -36,34 +39,30 @@ public class RentalOrderDetails_ORM implements Serializable{
     @ManyToOne
     @JoinColumn(name = "rNo", referencedColumnName = "rNo")
     private Rental rental;
+
     @Column(name = "rPrice")
     private BigDecimal rPrice;
     @Column(name = "rDesPrice")
     private BigDecimal rDesPrice;
 
+/*-------------------------------聯合映射用的的getter、setter--------------------------------------*/
 
-/*----------------------內部類別的 getter、setter--------------------------*/
-
-    public CompositeDetail getCompositeDetail() {
-        return new CompositeDetail(rOrdNo, rNo);
+    public RentalOrderVo_ORM getRentalOrderVoOrm() {
+        return rentalOrderVoOrm;
     }
 
-    public void setCompositeDetail(CompositeDetail compositeDetail) {
-        this.rOrdNo = compositeDetail.getrOrdNo();
-        this.rNo = compositeDetail.getrNo();
+    public void setRentalOrderVoOrm(RentalOrderVo_ORM rentalOrderVoOrm) {
+        this.rentalOrderVoOrm = rentalOrderVoOrm;
     }
 
-
-/*----------------------原本成員變數的 getter、setter--------------------------*/
-
-    public Integer getrNo() {
-        return rNo;
+    public Rental getRental() {
+        return rental;
     }
 
-    public void setrNo(Integer rNo) {
-        this.rNo = rNo;
+    public void setRental(Rental rental) {
+        this.rental = rental;
     }
-
+/*-------------------------------getter、setter--------------------------------------*/
     public BigDecimal getrPrice() {
         return rPrice;
     }
@@ -80,63 +79,73 @@ public class RentalOrderDetails_ORM implements Serializable{
         this.rDesPrice = rDesPrice;
     }
 
+/*-------------------------------內部類別的 getter、setter--------------------------------------*/
 
-/*--------------聯合映射用的 getter、setter( rentalorderdetails 是附表)-------------*/
-    public RentalOrderVo_ORM getRentalOrderVo() {
-        return rentalOrderVo;
+    public CompositeDetail getCompositeDetail() {
+        return new CompositeDetail(rentalOrderVoOrm, rental);
     }
 
-    public void setRentalOrderVo(RentalOrderVo_ORM rentalOrderVo) {
-        this.rentalOrderVo = rentalOrderVo;
+    public void setCompositeDetail(CompositeDetail key) {
+        key.setRentalOrderVoOrm(this.rentalOrderVoOrm);
+        key.setRental(this.rental);
     }
 
-
-
-/*----------------------複合主鍵用的內部類別--------------------------*/
+/*-------------------------------因為複合主鍵所以加上的內部類別--------------------------------------*/
 
     static class CompositeDetail implements Serializable {
 
-        private Integer rOrdNo;
-        private Integer rNo;
+        private RentalOrderVo_ORM rentalOrderVoOrm;
+        private Rental rental;
 
         public CompositeDetail() {
-            super();
+
         }
 
-        public CompositeDetail(Integer rOrdNo, Integer rNo) {
-            this.rOrdNo = rOrdNo;
-            this.rNo = rNo;
+        public CompositeDetail(RentalOrderVo_ORM rentalOrderVoOrm, Rental rental) {
+            this.rentalOrderVoOrm = rentalOrderVoOrm;
+            this.rental = rental;
         }
 
-        public Integer getrOrdNo() {
-            return rOrdNo;
+        public RentalOrderVo_ORM getRentalOrderVoOrm() {
+            return rentalOrderVoOrm;
         }
 
-        public void setrOrdNo(Integer rOrdNo) {
-            this.rOrdNo = rOrdNo;
+        public void setRentalOrderVoOrm(RentalOrderVo_ORM rentalOrderVoOrm) {
+            this.rentalOrderVoOrm = rentalOrderVoOrm;
         }
 
-        public Integer getrNo() {
-            return rNo;
+        public Rental getRental() {
+            return rental;
         }
 
-        public void setrNo(Integer rNo) {
-            this.rNo = rNo;
+        public void setRental(Rental rental) {
+            this.rental = rental;
         }
 
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (!(o instanceof CompositeDetail that)) return false;
-            return Objects.equals(getrOrdNo(), that.getrOrdNo()) && Objects.equals(getrNo(), that.getrNo());
+            return Objects.equals(getRentalOrderVoOrm(), that.getRentalOrderVoOrm()) && Objects.equals(getRental(), that.getRental());
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(getrOrdNo(), getrNo());
+            return Objects.hash(getRentalOrderVoOrm(), getRental());
         }
 
     } // 內部類別結束
+
+    @Override
+    public String toString() {
+        return "RentalOrderDetails_ORM{" +
+                "rentalOrderVoOrm=" + rentalOrderVoOrm +
+                ", rental=" + rental +
+                ", rPrice=" + rPrice +
+                ", rDesPrice=" + rDesPrice +
+                '}';
+    }
+
 
 
 }

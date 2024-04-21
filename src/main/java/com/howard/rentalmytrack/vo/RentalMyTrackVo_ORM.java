@@ -1,6 +1,10 @@
 package com.howard.rentalmytrack.vo;
 
+import com.roger.member.vo.MemberVO;
+import com.yu.rental.model.Rental;
+
 import javax.persistence.*;
+import java.awt.*;
 import java.io.Serializable;
 import java.sql.*;
 import java.util.Objects;
@@ -16,43 +20,41 @@ public class RentalMyTrackVo_ORM implements Serializable {
 	 * rTrackTime -> 加入追蹤時間
 	 * expRentalDate -> 期望租借時間
 	 */
+//    @Id
+//    @Column(name = "rNo", updatable = false)
+//    private Integer rNo;
     @Id
-    @Column(name = "rNo", updatable = false)
-    private Integer rNo;
+    @ManyToOne
+    @JoinColumn(name = "rNo", referencedColumnName = "rNo")
+    private Rental rental;
+
+//    @Id
+//    @Column(name = "memNo", updatable = false)
+//    private Integer memNo;
     @Id
-    @Column(name = "memNo", updatable = false)
-    private Integer memNo;
+    @ManyToOne()
+    @JoinColumn(name = "memNo", referencedColumnName = "memNo")
+    private  MemberVO memberVO;
+
 	@Column(name = "rTrackTime")
     private Timestamp rTrackTime;
 	@Column(name = "expRentalDate")
     private Date expRentalDate;
 
-/*----------------------內部類別的 getter、setter--------------------------*/
-
-    public CompositeTrack getCompositeKey() {
-        return new CompositeTrack(rNo, memNo);
+    public Rental getRental() {
+        return rental;
     }
 
-    public void setCompositeKey(CompositeTrack key) {
-        this.rNo = key.getrNo();
-        this.memNo = key.getMemNo();
+    public void setRental(Rental rental) {
+        this.rental = rental;
     }
 
-/*----------------------原本成員變數的 getter、setter--------------------------*/
-    public Integer getrNo() {
-        return rNo;
+    public MemberVO getMemberVO() {
+        return memberVO;
     }
 
-    public void setrNo(Integer rNo) {
-        this.rNo = rNo;
-    }
-
-    public Integer getMemNo() {
-        return memNo;
-    }
-
-    public void setMemNo(Integer memNo) {
-        this.memNo = memNo;
+    public void setMemberVO(MemberVO memberVO) {
+        this.memberVO = memberVO;
     }
 
     public Timestamp getrTrackTime() {
@@ -71,53 +73,73 @@ public class RentalMyTrackVo_ORM implements Serializable {
         this.expRentalDate = expRentalDate;
     }
 
+    public void setCompositeTrack(CompositeTrack key) {
+        key.setRental(this.rental);
+        key.setMemberVO(this.memberVO);
+    }
+
+    public CompositeTrack getCompositeTrack() {
+        return new CompositeTrack(this.rental, this.memberVO);
+    }
 
 
-/*----------------------複合主鍵用的內部類別--------------------------*/
 
     static class CompositeTrack implements Serializable {
 
-        private Integer rNo;
-        private Integer memNo;
+        private Rental rental;
+        private MemberVO memberVO;
 
         public CompositeTrack() {
-            super();
+
         }
 
-        public CompositeTrack(Integer rNo, Integer memNo) {
-            super();
-            this.rNo = rNo;
-            this.memNo = memNo;
+        public CompositeTrack(Rental rental, MemberVO memberVO) {
+            this.rental = rental;
+            this.memberVO = memberVO;
         }
 
-        public Integer getrNo() {
-            return rNo;
+        public Rental getRental() {
+            return rental;
         }
 
-        public void setrNo(Integer rNo) {
-            this.rNo = rNo;
+        public void setRental(Rental rental) {
+            this.rental = rental;
         }
 
-        public Integer getMemNo() {
-            return memNo;
+        public MemberVO getMemberVO() {
+            return memberVO;
         }
 
-        public void setMemNo(Integer memNo) {
-            this.memNo = memNo;
+        public void setMemberVO(MemberVO memberVO) {
+            this.memberVO = memberVO;
         }
 
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (!(o instanceof CompositeTrack that)) return false;
-            return Objects.equals(getrNo(), that.getrNo()) && Objects.equals(getMemNo(), that.getMemNo());
+            return Objects.equals(getRental(), that.getRental()) && Objects.equals(getMemberVO(), that.getMemberVO());
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(getrNo(), getMemNo());
+            return Objects.hash(getRental(), getMemberVO());
         }
 
-    } // 內部類別結束
+    }
+
+    @Override
+    public String toString() {
+        return "RentalMyTrackVo_ORM{" +
+                "rental=" + rental +
+                ", memberVO=" + memberVO +
+                ", rTrackTime=" + rTrackTime +
+                ", expRentalDate=" + expRentalDate +
+                '}';
+    }
+
+    public RentalMyTrackVo_ORM() {
+
+    }
 
 }

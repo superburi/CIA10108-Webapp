@@ -1,6 +1,7 @@
 package com.howard.rentalorder.vo;
 
 import com.howard.rentalorderdetails.vo.RentalOrderDetails_ORM;
+import com.roger.member.vo.MemberVO;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,12 +13,19 @@ import java.util.Set;
 @Table(name = "rentalorder")
 public class RentalOrderVo_ORM implements Serializable {
 
+    public RentalOrderVo_ORM() {
+
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rOrdNo", updatable = false)
     private Integer rOrdNo; // -> 租借品訂單編號
-    @Column(name = "memNo")
-    private Integer memNo; // -> 會員編號
+//    @Column(name = "memNo")
+//    private Integer memNo; // -> 會員編號
+    @ManyToOne
+    @JoinColumn(name = "memNo", referencedColumnName = "memNo")
+    private MemberVO memberVO;
     @Column(name = "rByrName")
     private String rByrName; // -> 訂購人姓名
     @Column(name = "rByrPhone")
@@ -57,7 +65,7 @@ public class RentalOrderVo_ORM implements Serializable {
     @Column(name = "rtnCompensation")
     private BigDecimal rtnCompensation; // -> 賠償金額
 
-    @OneToMany(mappedBy = "rentalOrderVo", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "rentalOrderVoOrm", cascade = CascadeType.ALL)
 //    @OrderBy("rOrdNo asc")
     private Set<RentalOrderDetails_ORM> detailsOrms;
 
@@ -69,14 +77,6 @@ public class RentalOrderVo_ORM implements Serializable {
 
     public void setrOrdNo(Integer rOrdNo) {
         this.rOrdNo = rOrdNo;
-    }
-
-    public Integer getMemNo() {
-        return memNo;
-    }
-
-    public void setMemNo(Integer memNo) {
-        this.memNo = memNo;
     }
 
     public String getrByrName() {
@@ -240,5 +240,42 @@ public class RentalOrderVo_ORM implements Serializable {
         this.detailsOrms = detailsOrms;
     }
 
+/*--------------------------聯合映射用的 getter、setter( member 是主表)------------------------------*/
+    public MemberVO getMemberVO() {
+        return this.memberVO;
+    }
+
+    public void setMemberVO(MemberVO memberVO) {
+        this.memberVO = memberVO;
+    }
+
+
+    @Override
+    public String toString() {
+        return "RentalOrderVo_ORM{" +
+                "rOrdNo=" + rOrdNo +
+                ", memberVO=" + memberVO +
+                ", rByrName='" + rByrName + '\'' +
+                ", rByrPhone='" + rByrPhone + '\'' +
+                ", rByrEmail='" + rByrEmail + '\'' +
+                ", rRcvName='" + rRcvName + '\'' +
+                ", rRcvPhone='" + rRcvPhone + '\'' +
+                ", rTakeMethod=" + rTakeMethod +
+                ", rAddr='" + rAddr + '\'' +
+                ", rPayMethod=" + rPayMethod +
+                ", rAllPrice=" + rAllPrice +
+                ", rAllDepPrice=" + rAllDepPrice +
+                ", rOrdTime=" + rOrdTime +
+                ", rDate=" + rDate +
+                ", rBackDate=" + rBackDate +
+                ", rRealBackDate=" + rRealBackDate +
+                ", rPayStat=" + rPayStat +
+                ", rOrdStat=" + rOrdStat +
+                ", rtnStat=" + rtnStat +
+                ", rtnRemark='" + rtnRemark + '\'' +
+                ", rtnCompensation=" + rtnCompensation +
+                ", detailsOrms=" + detailsOrms +
+                '}';
+    }
 
 }
