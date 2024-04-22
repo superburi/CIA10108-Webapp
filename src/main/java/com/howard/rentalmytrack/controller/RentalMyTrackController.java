@@ -67,6 +67,12 @@ public class RentalMyTrackController extends HttpServlet {
 				expRentalDate = new java.sql.Date(System.currentTimeMillis());
 				errorMsgs.put("expRentalDate", "請輸入日期!");
 			}
+
+			RentalMyTrackService tSvc = new RentalMyTrackService();
+			RentalMyTrackVo rentalMyTrackVo1 = tSvc.getOneTrack(rNo, memNo);
+			if (rentalMyTrackVo1 != null) {
+				errorMsgs.put("duplicate", "已經有這筆資料了!");
+			}
 				
 			RentalMyTrackVo rentalMyTrackVO = new RentalMyTrackVo();
 			
@@ -84,7 +90,7 @@ public class RentalMyTrackController extends HttpServlet {
 			}
 				
 			/***************************2.開始新增資料***************************************/
-			RentalMyTrackService tSvc = new RentalMyTrackService();
+
 			rentalMyTrackVO = tSvc.addTrack(Integer.valueOf(rNo), Integer.valueOf(memNo),
 					expRentalDate);
 			

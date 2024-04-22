@@ -84,7 +84,7 @@ public class RentalMyTrackVo_ORM implements Serializable {
 
 
 
-    static class CompositeTrack implements Serializable {
+    public static class CompositeTrack implements Serializable {
 
         private Rental rental;
         private MemberVO memberVO;

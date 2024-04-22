@@ -4,10 +4,12 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.password">Yuhan1207</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/mytest?serverTimezone=Asia/Taipei</property>
-        <property name="hibernate.connection.username">root</property>
+        <property name="connection.datasource">java:comp/env/jdbc/mytest</property>
+
+<!--        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>-->
+<!--        <property name="hibernate.connection.password">Yuhan1207</property>-->
+<!--        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/mytest?serverTimezone=Asia/Taipei</property>-->
+<!--        <property name="hibernate.connection.username">root</property>-->
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 
         <property name="hibernate.show_sql">true</property>
@@ -23,7 +25,9 @@
         <mapping class="com.howard.rentalorder.vo.RentalOrderVo_ORM"/>
         <mapping class="com.howard.rentalorderdetails.vo.RentalOrderDetails_ORM"/>
         <!--firesnoopy的-->
-        <mapping class="com.snpooy.studioorder.model.StudioOrder"/>
+        <mapping class="com.firesnoopy.studioinfo.model.StudioInfoVO"/>
+        <mapping class="com.firesnoopy.studioorder.model.StudioOrderVO"/>
+        <mapping class="com.firesnoopy.studiotimebooking.model.StudioTimeBooking"/>
         <!--曉妮的-->
         <mapping class="com.yu.rental.model.Rental"/>
         <mapping class="com.yu.rentalcategory.model.RentalCategory"/>
