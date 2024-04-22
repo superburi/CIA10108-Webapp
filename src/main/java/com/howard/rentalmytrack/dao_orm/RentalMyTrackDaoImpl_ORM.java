@@ -15,6 +15,7 @@ import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,18 +34,28 @@ public class RentalMyTrackDaoImpl_ORM implements RentalMyTrackDao_ORM{
     }
 
     @Override
-    public int insert(RentalMyTrackVo_ORM entity) {
-        return (Integer) getSession().save(entity);
+    public Map<String, Integer> insert(RentalMyTrackVo_ORM entity) {
+
+        getSession().save(entity);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("rNo", entity.getRental().getrNo());
+        map.put("memNo", entity.getMemberVO().getMemNo());
+
+        return map;
+
     }
 
     @Override
-    public int update(RentalMyTrackVo_ORM entity) {
+    public Map<String, Integer> update(RentalMyTrackVo_ORM entity) {
 
+        Map<String, Integer> map = new HashMap<>();
         try {
             getSession().update(entity);
-            return 1;
+            map.put("rNo", entity.getRental().getrNo());
+            map.put("memNo", entity.getMemberVO().getMemNo());
+            return map;
         } catch (Exception e) {
-            return -1;
+            return map; // 如果更新有問題，就回傳空的 map
         }
 
     }
@@ -92,13 +103,13 @@ public class RentalMyTrackDaoImpl_ORM implements RentalMyTrackDao_ORM{
         String query = "FROM RentalMyTrackVo_ORM WHERE 1=1";
 
         if (map.containsKey("rNo")) {
-            query += " AND rNo = " + map.get("rNo");
+            query += " AND rNo LIKE " + "'%" + map.get("rNo") + "%'";
         }
         if (map.containsKey("memNo")) {
-            query += " AND memNo = " + map.get("memNo");
+            query += " AND memNo LIKE " + "'%" + map.get("memNo") + "%'";
         }
         if (map.containsKey("rTrackTime")) {
-            query += " AND rTrackTime = " + map.get("rTrackTime");
+            query += " AND rTrackTime LIKE " + "'%" + map.get("rTrackTime") + "%'";
         }
         if (map.containsKey("expRentalDate")) {
             query += " AND expRentalDate = " + map.get("expRentalDate");

@@ -2,12 +2,6 @@ package com.roger.member.vo;
 
 import com.howard.rentalmytrack.vo.RentalMyTrackVo_ORM;
 import com.howard.rentalorder.vo.RentalOrderVo_ORM;
-import com.iting.productorder.model.ProductOrderVO;
-import com.roger.articlecollection.vo.ArticleCollectionVO;
-import com.roger.clicklike.vo.ClickLikeVO;
-import com.roger.columnreply.vo.ColumnReplyVO;
-import com.roger.notice.vo.NoticeVO;
-import com.roger.report.vo.ReportVO;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -80,14 +74,14 @@ public class MemberVO implements java.io.Serializable {
     @Column(name = "memStat")
     private Byte memStat;
 
-    @OneToMany(mappedBy = "memberVO", cascade = CascadeType.ALL)
-    private Set<NoticeVO> notices;
+//    @OneToMany(mappedBy = "memberVO", cascade = CascadeType.ALL)
+//    private Set<NoticeVO> notices;
 
 //    @OneToMany(mappedBy = "mycoupon", cascade = CascadeType.ALL)
 //    private Set<MemberVO> mycoupons;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private Set<ProductOrderVO> productOrders;
+//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+//    private Set<ProductOrderVO> productOrders;
 
 //    @OneToMany(mappedBy = "productMyFavorite", cascade = CascadeType.ALL)
 //    private Set<MemberVO> productMyFavorites;
@@ -95,17 +89,17 @@ public class MemberVO implements java.io.Serializable {
 //    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
 //    private Set<MemberVO> carts;
 
-    @OneToMany(mappedBy = "memberVO", cascade = CascadeType.ALL)
-    private Set<ClickLikeVO> clickLikes;
+//    @OneToMany(mappedBy = "memberVO", cascade = CascadeType.ALL)
+//    private Set<ClickLikeVO> clickLikes;
 
-    @OneToMany(mappedBy = "memberVO", cascade = CascadeType.ALL)
-    private Set<ArticleCollectionVO> articleCollections;
+//    @OneToMany(mappedBy = "memberVO", cascade = CascadeType.ALL)
+//    private Set<ArticleCollectionVO> articleCollections;
 
-    @OneToMany(mappedBy = "memberVO", cascade = CascadeType.ALL)
-    private Set<ReportVO> reports;
+//    @OneToMany(mappedBy = "memberVO", cascade = CascadeType.ALL)
+//    private Set<ReportVO> reports;
 
-    @OneToMany(mappedBy = "memberVO", cascade = CascadeType.ALL)
-    private Set<ColumnReplyVO> columnReplys;
+//    @OneToMany(mappedBy = "memberVO", cascade = CascadeType.ALL)
+//    private Set<ColumnReplyVO> columnReplys;
 
     @OneToMany(mappedBy = "memberVO", cascade = CascadeType.ALL)
     private Set<RentalOrderVo_ORM> rentalOrders;
@@ -274,13 +268,13 @@ public class MemberVO implements java.io.Serializable {
         this.memStat = memStat;
     }
 
-    public Set<NoticeVO> getNotices() {
-        return notices;
-    }
+//    public Set<NoticeVO> getNotices() {
+//        return notices;
+//    }
 
-    public void setNotices(Set<NoticeVO> notices) {
-        this.notices = notices;
-    }
+//    public void setNotices(Set<NoticeVO> notices) {
+//        this.notices = notices;
+//    }
 
 //    public Set<MemberVO> getMycoupons() {
 //        return mycoupons;
@@ -290,13 +284,13 @@ public class MemberVO implements java.io.Serializable {
 //        this.mycoupons = mycoupons;
 //    }
 
-    public Set<ProductOrderVO> getProductOrders() {
-        return productOrders;
-    }
+//    public Set<ProductOrderVO> getProductOrders() {
+//        return productOrders;
+//    }
 
-    public void setProductOrders(Set<ProductOrderVO> productOrders) {
-        this.productOrders = productOrders;
-    }
+//    public void setProductOrders(Set<ProductOrderVO> productOrders) {
+//        this.productOrders = productOrders;
+//    }
 
 //    public Set<MemberVO> getProductMyFavorites() {
 //        return productMyFavorites;
@@ -314,37 +308,37 @@ public class MemberVO implements java.io.Serializable {
 //        this.carts = carts;
 //    }
 
-    public Set<ClickLikeVO> getClickLikes() {
-        return clickLikes;
-    }
+//    public Set<ClickLikeVO> getClickLikes() {
+//        return clickLikes;
+//    }
 
-    public void setClickLikes(Set<ClickLikeVO> clickLikes) {
-        this.clickLikes = clickLikes;
-    }
+//    public void setClickLikes(Set<ClickLikeVO> clickLikes) {
+//        this.clickLikes = clickLikes;
+//    }
 
-    public Set<ArticleCollectionVO> getArticleCollections() {
-        return articleCollections;
-    }
+//    public Set<ArticleCollectionVO> getArticleCollections() {
+//        return articleCollections;
+//    }
 
-    public void setArticleCollections(Set<ArticleCollectionVO> articleCollections) {
-        this.articleCollections = articleCollections;
-    }
+//    public void setArticleCollections(Set<ArticleCollectionVO> articleCollections) {
+//        this.articleCollections = articleCollections;
+//    }
 
-    public Set<ReportVO> getReports() {
-        return reports;
-    }
+//    public Set<ReportVO> getReports() {
+//        return reports;
+//    }
 
-    public void setReports(Set<ReportVO> reports) {
-        this.reports = reports;
-    }
+//    public void setReports(Set<ReportVO> reports) {
+//        this.reports = reports;
+//    }
 
-    public Set<ColumnReplyVO> getColumnReplys() {
-        return columnReplys;
-    }
+//    public Set<ColumnReplyVO> getColumnReplys() {
+//        return columnReplys;
+//    }
 
-    public void setColumnReplys(Set<ColumnReplyVO> columnReplys) {
-        this.columnReplys = columnReplys;
-    }
+//    public void setColumnReplys(Set<ColumnReplyVO> columnReplys) {
+//        this.columnReplys = columnReplys;
+//    }
 
     public Set<RentalOrderVo_ORM> getRentalOrders() {
         return rentalOrders;

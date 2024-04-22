@@ -28,16 +28,16 @@
 //        try {
 //            tx = session.beginTransaction();
 //
-////            Rental rental = session.get(Rental.class, 5001);
-////            MemberVO memberVO = session.get(MemberVO.class, 5);
-////
-////            RentalMyTrackVo_ORM rentalMyTrackVoOrm = session.get(RentalMyTrackVo_ORM.class,
-////                    new RentalMyTrackVo_ORM.CompositeTrack(rental, memberVO));
-////
-////            System.out.println(rentalMyTrackVoOrm.getMemberVO().getmName());
+//            Rental rental = session.get(Rental.class, 5001);
+//            MemberVO memberVO = session.get(MemberVO.class, 5);
+//
+//            RentalMyTrackVo_ORM rentalMyTrackVoOrm = session.get(RentalMyTrackVo_ORM.class,
+//                    new RentalMyTrackVo_ORM.CompositeTrack(rental, memberVO));
+//
+//            System.out.println(rentalMyTrackVoOrm.getMemberVO().getmName());
 //
 //            RentalOrderVo_ORM rentalOrderVoOrm = session.get(RentalOrderVo_ORM.class, 13);
-//            System.out.println(rentalOrderVoOrm);
+//            System.out.println(rentalOrderVoOrm.getMemberVO().getMemNo());
 //
 //            tx.commit();
 //

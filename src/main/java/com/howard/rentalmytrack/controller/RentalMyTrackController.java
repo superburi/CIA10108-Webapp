@@ -95,14 +95,14 @@ public class RentalMyTrackController extends HttpServlet {
 					expRentalDate);
 			
 			/***************************3.新增完成,準備轉交(Send the Success view)***********/
-			String url = "/rentalmytrack/listAllTrack.jsp";
+			String url = "/rentalmytrack/listAllTracks.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllEmp.jsp
 			successView.forward(req, res);	
 				
 		} // 新增結束
         
         
-		// 來自所有追蹤品頁面(listAllTrack.jsp)、刪除追蹤品頁面(deleteTrack.jsp)，刪除單筆的請求
+		// 來自所有追蹤品頁面(listAllTracks.jsp)、刪除追蹤品頁面(deleteTrack.jsp)，刪除單筆的請求
         if ("delete".equals(action)) { 
 
             Map<String, String> errorMsgs = new LinkedHashMap<String, String>();
@@ -143,7 +143,7 @@ public class RentalMyTrackController extends HttpServlet {
             rentalMyTrackService.deleteTrack(rNo, memNo);
 
             /***************************3.刪除完成,準備轉交(Send the Success view)***********/
-            String url = "/rentalmytrack/listAllTrack.jsp";
+            String url = "/rentalmytrack/listAllTracks.jsp";
             RequestDispatcher successView = req.getRequestDispatcher(url); // 刪除成功，轉交回送出刪除的來源網站
             successView.forward(req, res);
             
@@ -208,7 +208,7 @@ public class RentalMyTrackController extends HttpServlet {
 				
 			/***************************3.修改完成,準備轉交(Send the Success view)*************/
 			req.setAttribute("trackVO", rentalMyTrackVO); // 資料庫update成功後,正確的的empVO物件,存入req
-			String url = "listAllTrack.jsp";
+			String url = "listAllTracks.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneEmp.jsp
 			successView.forward(req, res);
 				

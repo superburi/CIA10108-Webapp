@@ -7,18 +7,18 @@ import java.util.Map;
 
 public interface RentalMyTrackService_ORM {
 
-    RentalMyTrackVo_ORM addEmp(RentalMyTrackVo_ORM emp);
+    RentalMyTrackVo_ORM addTrack(RentalMyTrackVo_ORM emp);
 
-    RentalMyTrackVo_ORM updateEmp(RentalMyTrackVo_ORM emp);
+    RentalMyTrackVo_ORM updateTrack(RentalMyTrackVo_ORM emp);
 
-    void deleteEmp(Integer empno);
+    void deleteTrack(Integer rNo, Integer memNo);
 
-    RentalMyTrackVo_ORM getEmpByEmpno(Integer empno);
+    RentalMyTrackVo_ORM getById(Integer rNo, Integer memNo);
 
-    List<RentalMyTrackVo_ORM> getAllEmps(int currentPage);
+    List<RentalMyTrackVo_ORM> getAllTracks(int currentPage);
 
     int getPageTotal();
 
-    List<RentalMyTrackVo_ORM> getEmpsByCompositeQuery(Map<String, String[]> map);
+    List<RentalMyTrackVo_ORM> getTracksByCompositeQuery(Map<String, String[]> map);
 
 }

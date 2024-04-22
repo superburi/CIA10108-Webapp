@@ -139,7 +139,7 @@ public class RentalOrderDetails_ORM implements Serializable{
     @Override
     public String toString() {
         return "RentalOrderDetails_ORM{" +
-                "rentalOrderVoOrm=" + rentalOrderVoOrm +
+//                "rentalOrderVoOrm=" + rentalOrderVoOrm +
                 ", rental=" + rental +
                 ", rPrice=" + rPrice +
                 ", rDesPrice=" + rDesPrice +

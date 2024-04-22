@@ -7,9 +7,9 @@ import java.util.Map;
 
 public interface RentalMyTrackDao_ORM {
 
-    int insert(RentalMyTrackVo_ORM entity);
+    Map<String, Integer> insert(RentalMyTrackVo_ORM entity);
 
-    int update(RentalMyTrackVo_ORM entity);
+    Map<String, Integer> update(RentalMyTrackVo_ORM entity);
 
     int delete(Integer rNo, Integer memNo);
 
