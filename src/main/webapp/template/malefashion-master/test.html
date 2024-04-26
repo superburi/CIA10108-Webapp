@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        
+        #ff {
+            border: 1px solid black;
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <!-- <button onclick="getData();">連線取得資料</button> -->
+
+
+    <!-- <form action="" method="get"></form> -->
+
+    <button onclick="getAllTrackData()">取得所有追蹤的租借品</button>
+
+    <button onclick="getAllRentalOrderData()">取得所有租借訂單</button>
+
+    <button onclick="getAllDetailsData()">取得所有訂單明細</button>
+
+    <br>
+    <br>
+
+    <form action="http://localhost:8081/CIA10108_Webapp_war_exploded/rentalmytrack/test.do" method="post" id="ff">
+
+        <p>輸入租借品編號 : </p>
+        <input type="text" name="rNo" required>
+        <p>輸入會員編號 : </p>
+        <input type="text" name="memNo" required>
+        <p>輸入期望租借日期 : </p>
+        <input type="date" name="expRentalDate">
+
+        <input type="hidden" name="action" value="insert">
+        <button type="submit">送出</button>
+
+    </form>
+
+    
+
+
+    <br/>
+    <hr>
+
+    <div id="result"></div>
+
+
+    <script>
+
+        // function getData() {
+            
+        //     // 利用fatch進行連線並取得資料
+        //     fetch("https://cwpeng.github.io/live-records-samples/data/products.json").then(function(response) {
+        //        return response.json(); 
+        //     }).then(function(data) {
+        //         let result = document.querySelector("#result");
+        //         result.innerHTML = "";
+        //         for (let i = 0; i < data.length; i++) {
+        //             let element = data[i];
+        //             result.innerHTML += "<div>" + element.name + ", " + element.price + ", " + element.description + "</div>";
+        //         }
+                
+        //     });
+
+        // }
+
+
+            function getAllTrackData() {
+
+                fetch("http://localhost:8081/CIA10108_Webapp_war_exploded/rentalmytrack/test.do?action=getAllTrack").then(function(response) {
+                        return response.json();
+                    }).then(function(data) {
+                        let result = document.querySelector("#result");
+                        result.innerHTML = "";
+                        // result.innerHTML += "<div>" + data.rNo + ", " + data.memNo + ", " + data.rTrackTime + ", " + data.expRentalDate + "</div>";
+                        for (let i = 0; i < data.length; i++) {
+                            let element = data[i];
+                            result.innerHTML += "<div>" + "租借品編號 : " + element.rNo + "</div>"
+                                              + "<div>" + "會員編號 : " + element.memNo + "</div>"
+                                              + "<div>" + "加入追蹤時間 : " + element.rTrackTime + "</div>"
+                                              + "<div>" + "期望租借日期 : " + element.expRentalDate + "</div>" + "<br>"
+                        }
+
+                        // + ", " + element.memNo + ", " + element.rTrackTime + ", " + element.expRentalDate + 
+                    });
+                
+            }
+
+            function getAllRentalOrderData() {
+                
+                fetch("http://localhost:8081/CIA10108_Webapp_war_exploded/rentalmytrack/test.do?action=getAllOrder").then(function(response) {
+                    return response.json();
+                }).then(function(data) {
+                    
+                    let result = document.querySelector("#result");
+                        result.innerHTML = "";
+                        for (let i = 0; i < data.length; i++) {
+                            let element = data[i];
+                            result.innerHTML += "<div>" + "租借品訂單編號 : " + element.rOrdNo + "</div>"
+                                              + "<div>" + "會員編號 : " + element.memNo + "</div>"
+                                              + "<div>" + "訂購人姓名 : " + element.rByrName + "</div>"
+                                              + "<div>" + "訂購人手機號碼 : " + element.rByrPhone + "</div>"
+                                              + "<div>" + "訂購人Email : " + element.rByrEmail + "</div>"
+                                              + "<div>" + "收件人姓名 : " + element.rRcvName + "</div>"
+                                              + "<div>" + "收件人手機號碼 : " + element.rRcvPhone + "</div>"
+                                              + "<div>" + "取貨方式 : " + element.rTakeMethod + "</div>"
+                                              + "<div>" + "宅配地址 : " + element.rAddr + "</div>"
+                                              + "<div>" + "付款方式 : " + element.rPayMethod + "</div>"
+                                              + "<div>" + "訂單總金額 : " + element.rAllPrice + "</div>"
+                                              + "<div>" + "押金總金額 : " + element.rAllDepPrice + "</div>"
+                                              + "<div>" + "下單時間 : " + element.rOrdTime + "</div>"
+                                              + "<div>" + "預計租借日期 : " + element.rDate + "</div>"
+                                              + "<div>" + "預計歸還日期 : " + element.rBackDate + "</div>"
+                                              + "<div>" + "實際歸還日期 : " + element.rRealBackDate + "</div>"
+                                              + "<div>" + "付款狀態 : " + element.rPayStat + "</div>"
+                                              + "<div>" + "訂單狀態 : " + element.rOrdStat + "</div>"
+                                              + "<div>" + "歸還狀態 : " + element.rtnStat + "</div>"
+                                              + "<div>" + "歸還註記 : " + element.rtnRemark + "</div>"
+                                              + "<div>" + "賠償金額 : " + element.rtnCompensation + "</div>"
+ 
+                        }
+
+                });
+
+            }
+
+            
+            function getAllDetailsData() {
+
+                fetch("http://localhost:8081/CIA10108_Webapp_war_exploded/rentalmytrack/test.do?action=getAllDetails").then(function(response) {
+                        return response.json();
+                    }).then(function(data) {
+                        let result = document.querySelector("#result");
+                        result.innerHTML = "";
+                        for (let i = 0; i < data.length; i++) {
+                            let element = data[i];
+                            result.innerHTML += "<div>" + "租借品訂單編號 : " + element.rOrdNo + "</div>"
+                                            + "<div>" + "租借品編號 : " + element.rNo + "</div>"
+                                            + "<div>" + "單價 : " + element.rPrice + "</div>"
+                                            + "<div>" + "押金 : " + element.rDesPrice + "</div>" + "<br>"
+                        }
+
+                    });
+
+            }
+
+
+ 
+    </script>
+    
+</body>
+</html>
