@@ -964,6 +964,8 @@ ol {
 	visibility: visible;
 }
 
+
+
 .product__item:hover .product__item__text h6 {
 	opacity: 0;
 }
@@ -3848,4 +3850,16 @@ ol {
 	.categories__text:before {
 		height: 250px;
 	}
+}
+
+
+
+
+
+#expRentalDate.hidden {
+	display: none;
+}
+
+input.hidden {
+	display: none;
 }

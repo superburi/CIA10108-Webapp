@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/rentalmytrack/Track.do")
 public class TestController extends HttpServlet {
@@ -66,6 +68,64 @@ public class TestController extends HttpServlet {
             String url = "/template/malefashion-master/shop-details.jsp";
             RequestDispatcher successView = req.getRequestDispatcher(url);
             successView.forward(req, res);
+
+        }
+
+        if (action.equals("getTrackList")) {
+
+            Integer memNo = Integer.valueOf(req.getParameter("memNo"));
+            RentalMyTrackDaoImpl rentalMyTrackDao = new RentalMyTrackDaoImpl();
+            RentalDAOHibernateImpl rentalDAOHibernate = new RentalDAOHibernateImpl();
+            List<Rental> rentalList = new ArrayList<>();
+            List<RentalMyTrackVo> trackList = rentalMyTrackDao.getByMemNo(memNo);
+
+            for (RentalMyTrackVo trackVo : trackList) {
+                Rental rental = rentalDAOHibernate.getByPK(trackVo.getrNo());
+                rentalList.add(rental);
+            }
+
+            req.setAttribute("list", rentalList);
+            String url = "/template/malefashion-master/tracklist.jsp";
+            RequestDispatcher successView = req.getRequestDispatcher(url);
+            successView.forward(req, res);
+
+        }
+
+        if (action.equals("deleteTrack")) {
+            res.setContentType("text/plain; charset=UTF-8");
+            Integer rNo = Integer.valueOf(req.getParameter("rNo"));
+            Integer memNo = Integer.valueOf(req.getParameter("memNo"));
+
+            RentalMyTrackDaoImpl rentalMyTrackDao = new RentalMyTrackDaoImpl();
+            rentalMyTrackDao.delete(rNo, memNo);
+            RentalMyTrackVo rentalMyTrackVo = rentalMyTrackDao.findByPK(rNo, memNo);
+
+            if (rentalMyTrackVo == null) {
+                res.getWriter().write("deleteSuccess");
+            }
+
+        }
+
+        if (action.equals("updateTrack")) {
+
+            res.setContentType("text/plain; charset=UTF-8");
+
+            Integer rNo = Integer.valueOf(req.getParameter("rNo"));
+            Integer memNo = Integer.valueOf(req.getParameter("memNo"));
+            Date expRentalDate = Date.valueOf(req.getParameter("expRentalDate"));
+
+            RentalMyTrackDaoImpl rentalMyTrackDao = new RentalMyTrackDaoImpl();
+            RentalMyTrackVo rentalMyTrackVo = new RentalMyTrackVo();
+            rentalMyTrackVo.setrNo(rNo);
+            rentalMyTrackVo.setMemNo(memNo);
+            rentalMyTrackVo.setExpRentalDate(expRentalDate);
+
+            rentalMyTrackDao.update(rentalMyTrackVo);
+
+            RentalMyTrackVo track1 = rentalMyTrackDao.findByPK(rNo, memNo);
+            if (expRentalDate.equals(track1.getExpRentalDate())) {
+                res.getWriter().write("updateSuccess");
+            }
 
         }
 

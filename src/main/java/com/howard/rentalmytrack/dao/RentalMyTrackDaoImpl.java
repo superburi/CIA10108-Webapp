@@ -25,6 +25,7 @@ public class RentalMyTrackDaoImpl implements RentalMyTrackDao {
     private static final String INSERT = "INSERT INTO rentalmytrack (rNo, memNo, rTrackTime, expRentalDate) VALUES (?, ?, ?, ?)";
     private static final String UPDATE = "UPDATE rentalmytrack SET expRentalDate = ? WHERE rNo = ? AND memNo = ?";
     private static final String DELETE = "DELETE FROM rentalmytrack where rNo = ? AND memNo = ?";
+    private static final String GET_BY_ANY = "SELECT rNo, memNo, rTrackTime, expRentalDate FROM rentalmytrack WHERE 1=1";
     
     /* 以下方法按照 增、刪、改、查 排列 */
     
@@ -303,6 +304,69 @@ public class RentalMyTrackDaoImpl implements RentalMyTrackDao {
         return list;
 
 	} // getAll 結束
+
+    public List<RentalMyTrackVo> getByMemNo(Integer memNo) {
+
+
+        List<RentalMyTrackVo> list = new ArrayList<>();
+        RentalMyTrackVo rmt = null;
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            Class.forName(driver);
+            con = DriverManager.getConnection(url, userid, passwd);
+            pstmt = con.prepareStatement(GET_BY_ANY + " AND memNo = " + memNo);
+            rs = pstmt.executeQuery();
+
+            while(rs.next()) {
+
+                rmt = new RentalMyTrackVo();
+                rmt.setrNo(rs.getInt("rNo"));
+                rmt.setMemNo(rs.getInt("memNo"));
+                rmt.setrTrackTime(rs.getTimestamp("rTrackTime"));
+                rmt.setExpRentalDate(rs.getDate("expRentalDate"));
+                list.add(rmt);
+
+            }
+
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Couldn't load database driver. "
+                    + e.getMessage());
+            // Handle any SQL errors
+        } catch (SQLException se) {
+            throw new RuntimeException("A database error occured. "
+                    + se.getMessage());
+            // Clean up JDBC resources
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException se) {
+                    se.printStackTrace(System.err);
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException se) {
+                    se.printStackTrace(System.err);
+                }
+            }
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (Exception e) {
+                    e.printStackTrace(System.err);
+                }
+            }
+        }
+
+        return list;
+
+    }
 	
 	
 }

@@ -16,4 +16,6 @@ public interface RentalMyTrackDao {
 	
 	List<RentalMyTrackVo> getAll();
 
+	public List<RentalMyTrackVo> getByMemNo(Integer memNo);
+
 }

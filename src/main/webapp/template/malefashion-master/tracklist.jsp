@@ -13,10 +13,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-//    RentalMyTrackDaoImpl rentalMyTrackDao = new RentalMyTrackDaoImpl();
-//    List<RentalMyTrackVo> list = rentalMyTrackDao.getAll();
-    RentalDAOHibernateImpl rentalDAOHibernate = new RentalDAOHibernateImpl();
-    List<Rental> list = rentalDAOHibernate.getAll();
+    List<Rental> list = (List<Rental>) request.getAttribute("list");
     pageContext.setAttribute("list", list);
 %>
 
@@ -36,14 +33,14 @@
           rel="stylesheet">
 
     <!-- Css Styles -->
-    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
-    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
-    <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
-    <link rel="stylesheet" href="css/magnific-popup.css" type="text/css">
-    <link rel="stylesheet" href="css/nice-select.css" type="text/css">
-    <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
-    <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
-    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/template/malefashion-master/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/template/malefashion-master/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/template/malefashion-master/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/template/malefashion-master/css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/template/malefashion-master/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/template/malefashion-master/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/template/malefashion-master/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/template/malefashion-master/css/style.css" type="text/css">
 </head>
 
 <body>
@@ -70,9 +67,9 @@
         </div>
     </div>
     <div class="offcanvas__nav__option">
-        <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
-        <a href="#"><img src="img/icon/heart.png" alt=""></a>
-        <a href="#"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
+        <a href="#" class="search-switch"><img src="${pageContext.request.contextPath}/template/malefashion-master/img/icon/search.png" alt=""></a>
+        <a href="#"><img src="${pageContext.request.contextPath}/template/malefashion-master/img/icon/heart.png" alt=""></a>
+        <a href="#"><img src="${pageContext.request.contextPath}/template/malefashion-master/img/icon/cart.png" alt=""> <span>0</span></a>
         <div class="price">$0.00</div>
     </div>
     <div id="mobile-menu-wrap"></div>
@@ -122,7 +119,7 @@
                 <nav class="header__menu mobile-menu">
                     <ul>
                         <li><a href="./index.html">Home</a></li>
-                        <li class="active"><a href="./shop.html">Shop</a></li>
+                        <li class="active"><a href="${pageContext.request.contextPath}/template/malefashion-master/shop.jsp">商城首頁</a></li>
                         <li><a href="#">Pages</a>
                             <ul class="dropdown">
                                 <li><a href="./about.html">About Us</a></li>
@@ -139,8 +136,8 @@
             </div>
             <div class="col-lg-3 col-md-3">
                 <div class="header__nav__option">
-                    <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
-                    <a href="${pageContext.request.contextPath}/rentalmytrack/Track.do?action=getTrackList&memNo=2"><img src="img/icon/heart.png" alt=""></a>
+                    <a href="#" class="search-switch"><img src="${pageContext.request.contextPath}/template/malefashion-master/img/icon/search.png" alt=""></a>
+                    <a href="#"><img src="${pageContext.request.contextPath}/template/malefashion-master/img/icon/heart.png" alt=""></a>
                     <a href="${pageContext.request.contextPath}/template/malefashion-master/shopping-cart.jsp"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
                     <div class="price">$0.00</div>
                 </div>
@@ -157,10 +154,10 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb__text">
-                    <h4>Shop</h4>
+                    <h4>所有追蹤商品</h4>
                     <div class="breadcrumb__links">
-                        <a href="./index.html">Home</a>
-                        <span>Shop</span>
+                        <a href="${pageContext.request.contextPath}/template/malefashion-master/shop.jsp">商城首頁</a>
+                        <span>所有追蹤商品</span>
                     </div>
                 </div>
             </div>
@@ -346,9 +343,12 @@
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="shop__product__option__right">
-                                <p>Sort by Price:</p>
+                                <p>排序 : </p>
                                 <select>
-                                    <option value="">Low To High</option>
+                                    <option value="ORDER BY rPrice desc">依價格(高到低)</option>
+                                    <option value="ORDER BY rPrice asc">依價格(低到高)</option>
+                                    <option value="ORDER BY rTrackTime desc">依加入時間(高到低)</option>
+                                    <option value="ORDER BY rTrackTime asc">依加入時間(低到高)</option>
                                     <option value="">$0 - $55</option>
                                     <option value="">$55 - $100</option>
                                 </select>
@@ -358,38 +358,43 @@
                 </div>
                 <div class="row">
                     <c:forEach var="rentalVO" items="${list}">
-                        <div class="col-lg-4 col-md-6 col-sm-6" onclick="findById()">
+                        <div class="col-lg-4 col-md-6 col-sm-6" id="${rentalVO.rNo}" onclick="findById()">
                             <div class="product__item">
-                                <div class="product__item__pic set-bg" data-setbg="img/product/product-2.jpg">
+                                <div class="product__item__pic set-bg" data-setbg="${pageContext.request.contextPath}/template/malefashion-master/img/product/product-2.jpg">
                                     <ul class="product__hover">
-                                         <li><a href="#" onclick="addTrack(${rentalVO.rNo}, 2)"><img src="img/icon/heart.png" alt=""></a></li>
-                                        <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+<%--                                        <li><a href="#" onclick="addTrack(${rentalVO.rNo}, 2)"><img src="${pageContext.request.contextPath}/template/malefashion-master/img/icon/heart.png" alt=""><span>加入追蹤</span></a></li>--%>
+                                        <li><a href="#"><img src="${pageContext.request.contextPath}/template/malefashion-master/img/icon/compare.png" alt=""> <span>比較</span></a>
                                         </li>
-                                        <li><a href="${pageContext.request.contextPath}/rentalmytrack/Track.do?action=get&rNo=${rentalVO.rNo}"><img src="img/icon/search.png" alt=""></a></li>
+                                        <li><a href="${pageContext.request.contextPath}/rentalmytrack/Track.do?action=get&rNo=${rentalVO.rNo}"><img src="${pageContext.request.contextPath}/template/malefashion-master/img/icon/search.png" alt=""><span>詳情</span></a></li>
+                                        <li><a href=""><img src="${pageContext.request.contextPath}/template/malefashion-master/img/icon/calendar%20(2).png"><span>期望租借日期</span></a></li>
+                                        <li><a href="#" class="deleteTrack" onclick="deleteTrack(${rentalVO.rNo}, 2)"><img src="${pageContext.request.contextPath}/template/malefashion-master/img/icon/delete.png" alt=""><span>取消追蹤</span></a></li>
                                     </ul>
                                 </div>
                                 <div class="product__item__text">
                                     <h6>${rentalVO.rName}</h6>
                                     <a href="#" class="add-cart">+ 加入購物車</a>
-                                    <div class="rating">
-                                        <i class="fa fa-star-o"></i>
-                                        <i class="fa fa-star-o"></i>
-                                        <i class="fa fa-star-o"></i>
-                                        <i class="fa fa-star-o"></i>
-                                        <i class="fa fa-star-o"></i>
+<%--                                    <a href="#" class="add-expRentalDate">加入期望租借日期</a>--%>
+<%--                                    <button id="btn_addexp" type="button">加入期望租借日期</button>--%>
+                                    <input type="date" id="expRentalDate" class="hidden">
+<%--                                    <div class="rating">--%>
+<%--                                        <i class="fa fa-star-o"></i>--%>
+<%--                                        <i class="fa fa-star-o"></i>--%>
+<%--                                        <i class="fa fa-star-o"></i>--%>
+<%--                                        <i class="fa fa-star-o"></i>--%>
+<%--                                        <i class="fa fa-star-o"></i>--%>
+<%--                                    </div>--%>
+                                    <h5>單價 : $${rentalVO.rPrice}</h5>
+                                    <div class="product__color__select">
+                                        <label for="pc-4">
+                                            <input type="radio" id="pc-4">
+                                        </label>
+                                        <label class="active black" for="pc-5">
+                                            <input type="radio" id="pc-5">
+                                        </label>
+                                        <label class="grey" for="pc-6">
+                                            <input type="radio" id="pc-6">
+                                        </label>
                                     </div>
-                                    <h5>單價 : ${rentalVO.rPrice}</h5>
-                                        <%--                                    <div class="product__color__select">--%>
-                                        <%--                                        <label for="pc-4">--%>
-                                        <%--                                            <input type="radio" id="pc-4">--%>
-                                        <%--                                        </label>--%>
-                                        <%--                                        <label class="active black" for="pc-5">--%>
-                                        <%--                                            <input type="radio" id="pc-5">--%>
-                                        <%--                                        </label>--%>
-                                        <%--                                        <label class="grey" for="pc-6">--%>
-                                        <%--                                            <input type="radio" id="pc-6">--%>
-                                        <%--                                        </label>--%>
-                                        <%--                                    </div>--%>
                                 </div>
                             </div>
                         </div>
@@ -491,18 +496,18 @@
 <!-- Search End -->
 
 <!-- Js Plugins -->
-<script src="js/jquery-3.3.1.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/jquery.nice-select.min.js"></script>
-<script src="js/jquery.nicescroll.min.js"></script>
-<script src="js/jquery.magnific-popup.min.js"></script>
-<script src="js/jquery.countdown.min.js"></script>
-<script src="js/jquery.slicknav.js"></script>
-<script src="js/mixitup.min.js"></script>
-<script src="js/owl.carousel.min.js"></script>
-<script src="js/main.js"></script>
-<script src="js/addTrack.js"></script>
-<script src="js/findById.js"></script>
+<script src="${pageContext.request.contextPath}/template/malefashion-master/js/jquery-3.3.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/template/malefashion-master/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/template/malefashion-master/js/jquery.nice-select.min.js"></script>
+<script src="${pageContext.request.contextPath}/template/malefashion-master/js/jquery.nicescroll.min.js"></script>
+<script src="${pageContext.request.contextPath}/template/malefashion-master/js/jquery.magnific-popup.min.js"></script>
+<script src="${pageContext.request.contextPath}/template/malefashion-master/js/jquery.countdown.min.js"></script>
+<script src="${pageContext.request.contextPath}/template/malefashion-master/js/jquery.slicknav.js"></script>
+<script src="${pageContext.request.contextPath}/template/malefashion-master/js/mixitup.min.js"></script>
+<script src="${pageContext.request.contextPath}/template/malefashion-master/js/owl.carousel.min.js"></script>
+<script src="${pageContext.request.contextPath}/template/malefashion-master/js/main.js"></script>
+<script src="${pageContext.request.contextPath}/template/malefashion-master/js/addTrack.js"></script>
+<script src="${pageContext.request.contextPath}/template/malefashion-master/js/findById.js"></script>
 
 <script>
     // 368
@@ -514,20 +519,64 @@
 
     <%--}--%>
 
-    // 365
-    function addTrack(rNo, memNo) {
 
-        fetch("${pageContext.request.contextPath}/rentalmytrack/Track.do?action=addTrack&rNo=" +
+    // 366
+    // $("a.deleteTrack").on("click", function (e) {
+    //     e.preventDefault();
+    // })
+
+    // 366
+    function deleteTrack(rNo, memNo) {
+
+        fetch("${pageContext.request.contextPath}/rentalmytrack/Track.do?action=deleteTrack&rNo=" +
             rNo + "&memNo=" + memNo, {method : "POST"})
             .then(function (response) {
                 return response.text();
             }).then(function (data) {
-            if (data === "created") {
-                alert("新增追蹤品成功!");
+            if (data === "deleteSuccess") {
+                alert("刪除追蹤成功!");
             }
         })
 
+        $("a.deleteTrack").closest("div#" + rNo).remove();
+
     }
+
+    // 375
+    $("button#btn_addexp").on("click", function () {
+
+        $("button#btn_addexp").addClass("hidden");
+        $("input#expRentalDate").removeClass("hidden");
+
+    });
+
+    $("input#expRentalDate").on("blur", function () {
+
+        let rNo = $(this).closest("div.col-lg-4").attr("id");
+
+        var formData = new URLSearchParams();
+        formData.append("action", "updateTrack");
+        formData.append("rNo", rNo);
+        formData.append("memNo", 2);
+        formData.append("expRentalDate", $("input#expRentalDate").val());
+
+        fetch("${pageContext.request.contextPath}/rentalmytrack/Track.do", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: formData
+        }).then(function (response) {
+            return response.text();
+        }).then(function (data) {
+            if (data === "updateSuccess") {
+                alert("期望租借日期已更改!")
+            }
+        });
+
+    });
+
+
 
 </script>
 
